@@ -1,0 +1,11 @@
+{
+  "name": "VIR",
+  "app_id": "94bc6a16",
+  "gulpStartupTasks": [
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}

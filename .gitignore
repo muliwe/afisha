@@ -1,0 +1,25 @@
+.idea/
+node_modules/
+platforms/
+plugins/
+data/
+
+#Mac OS X noise
+*.DS_Store
+
+#Windows noise
+Thumbs.db
+
+#Vim noise
+*.swp
+*.swo
+
+#Sass noise
+.sass-cache
+.temp
+
+#Sublime text files
+*.sublime-project
+*.sublime-workspace
+#/www/css/
+#/www/lib/
