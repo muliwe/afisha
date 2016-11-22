@@ -8,11 +8,7 @@ angular.module('afisha').controller('ListFilmController',
          */
 
         $scope.films = [];
-                }
-                interval = Math.max(Math.floor(seconds / 60), 1);
-                return interval + " m";
-            }
-        }
+
         // Find a list of Car models
         $scope.getFilmList = function(){
             var resourse = null;
