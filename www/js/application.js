@@ -195,6 +195,14 @@ const ApplicationConfiguration = (function(){
         });
 
         // APP START
+        initApp();
+
+        function initApp(shouldInitOnSignInView) {
+            const $injector = angular.bootstrap(document, [applicationModuleName]);
+            const $location = $injector.get('$location');
+
+            $location.path('/list/films');
+        }
     });
 
     return {
