@@ -5,7 +5,7 @@ angular.module('afisha').controller('HomeController',
 
         $scope.$watch(function() {
             return 'Moscow';
-        }, setDisplayName);
+        }, setCityName);
 
         function setCityName() {
             $scope.cityName = 'Moscow';

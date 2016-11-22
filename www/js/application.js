@@ -1,17 +1,13 @@
 'use strict';
 
-var ApplicationConfiguration = (function(){
-    var applicationModuleName = 'afisha';
-    var applicationModuleVendorDependencies = [
-        'ngResource',
-        'ngAnimate',
-        'ngSanitize',
-        'ui.router',
-        'ionic',
-        'ngCordova'
+const ApplicationConfiguration = (function(){
+    const applicationModuleName = 'afishaApp';
+    const applicationModuleVendorDependencies = [
+        'app.core',
+        'afisha'
     ];
-    var module_defers = [];
-    var registerModule = function(moduleName, dependencies){
+    const module_defers = [];
+    const registerModule = function(moduleName, dependencies){
         module_defers.push({
             moduleName: moduleName,
             dependencies: dependencies
@@ -48,15 +44,15 @@ var ApplicationConfiguration = (function(){
             }
         ]);
         angular.module(ApplicationConfiguration.applicationModuleName).run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate, $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout) {
-            var retainCounter = 0;
+            let retainCounter = 0;
 
-            var spinnerUrl = 'img/spinner.svg';
+            const spinnerUrl = 'img/spinner.svg';
 
-            var disableLoadingShowMock = $rootScope.$on('loading:show', function() {
+            const disableLoadingShowMock = $rootScope.$on('loading:show', function() {
                 retainCounter++;
             });
 
-            var disableLoadingHideMock = $rootScope.$on('loading:hide', function() {
+            const disableLoadingHideMock = $rootScope.$on('loading:hide', function() {
                 retainCounter--;
             });
 
@@ -115,7 +111,7 @@ var ApplicationConfiguration = (function(){
                 }
             }
 
-            var currentState;
+            let currentState;
             $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
                 document.addEventListener("deviceready", function() {
                     setStatusBar(toState);
@@ -145,7 +141,7 @@ var ApplicationConfiguration = (function(){
                 }, false);
             }
 
-            var offlinePopupShown = false;
+            let offlinePopupShown = false;
             function showOfflineAlert() {
                 if (!offlinePopupShown) {
                     offlinePopupShown = true;
@@ -164,7 +160,7 @@ var ApplicationConfiguration = (function(){
 
             $ionicPlatform.ready(function(){
 
-                var keyboardHideTimer;
+                let keyboardHideTimer;
 
                 if(window.cordova && window.cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);

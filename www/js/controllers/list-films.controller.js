@@ -11,7 +11,7 @@ angular.module('afisha').controller('ListFilmController',
 
         // Find a list of Car models
         $scope.getFilmList = function(){
-            var resourse = null;
+            let resourse = null;
 
             return resourse;
         };

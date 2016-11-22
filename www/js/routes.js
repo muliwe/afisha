@@ -16,13 +16,13 @@ angular.module('afisha').config(['$stateProvider', '$urlRouterProvider',
             })
             .state('list.films', {
                 url: '/films',
-                templateUrl: 'templates/views/list-films.view.html'
+                templateUrl: 'templates/views/list-film.view.html'
             })
             .state('film', {
                 abstract: true,
                 url: '/film/:filmId',
-                templateUrl: 'templates/views/film.view.html',
-                controller: 'FilmController'
+                controller: 'FilmController',
+                templateUrl: 'templates/views/film.view.html'
             })
     }
 ]);
