@@ -28,7 +28,7 @@
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 </head>
-<body class="platform-android platform-cordova platform-webview" ng-class="bodyClass">
+<body class="platform-android platform-cordova platform-webview" ng-class="bodyClass" ng-app="afishaApp">
 <div ng-include="'templates/views/home.view.html'" ng-controller="HomeController"></div>
 <ui-view name="full-view"></ui-view>
 </body>

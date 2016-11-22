@@ -1,15 +1,10 @@
 'use strict';
 
-angular.module('afisha').controller('ListFilmController',
+angular.module('afisha').controller('ListFilmsController',
     ['$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicPopover',
     function($scope, $state, $ionicModal, $ionicPopup, $ionicPopover) {
-        /**
-         * Common
-         */
-
         $scope.films = [];
 
-        // Find a list of Car models
         $scope.getFilmList = function(){
             let resourse = null;
 
@@ -21,7 +16,5 @@ angular.module('afisha').controller('ListFilmController',
                 $scope.$broadcast('scroll.refreshComplete');
             });
         };
-
     }
-
 ]);

@@ -198,10 +198,10 @@ const ApplicationConfiguration = (function(){
         initApp();
 
         function initApp(shouldInitOnSignInView) {
-            const $injector = angular.bootstrap(document, [applicationModuleName]);
+            const $injector = angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
             const $location = $injector.get('$location');
 
-            $location.path('/list/films');
+            // $location.path('/list/films');
         }
     });
 
