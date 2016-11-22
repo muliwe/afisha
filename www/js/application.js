@@ -18,6 +18,7 @@ var ApplicationConfiguration = (function(){
         });
         return angular.module(moduleName, dependencies || []);
     };
+
     if(window.location.hash === '#_=_') window.location.hash = '#!';
     angular.element(document).ready(function(){
 
@@ -46,40 +47,7 @@ var ApplicationConfiguration = (function(){
 
             }
         ]);
-        angular.module(ApplicationConfiguration.applicationModuleName).run(function(User, UserService, $ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate, $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, cargoConfig, $timeout) {
-            $rootScope.$on('event:auth-login_required', function() {
-                UserService.logout();
-            });
-
-            var isPopupShown = false;
-            $rootScope.$on('error:old_version', function(event, errorResponseData) {
-                if (!isPopupShown) {
-                    isPopupShown = true;
-                    $ionicPopup.confirm({
-                        cssClass: 'red',
-                        title: '<i class="ion-close"></i>Old app version',
-                        template: errorResponseData.error.message,
-                        cancelText: 'Update later',
-                        cancelType: 'button-popup-secondary',
-                        okText: 'Update',
-                        okType: 'button-balanced'
-                    }).then(function(wantToUpdate) {
-                        isPopupShown = false;
-                        if (wantToUpdate) {
-                            cargoConfig
-                                .getConfigByName('updateUrls')
-                                .then(function(updateUrls) {
-                                    if (ionic.Platform.isAndroid()) {
-                                        cordova.InAppBrowser.open(updateUrls.android, '_system');
-                                    } else if (ionic.Platform.isIOS()) {
-                                        cordova.InAppBrowser.open(updateUrls.ios, '_system');
-                                    }
-                                });
-                        }
-                    });
-                }
-            });
-
+        angular.module(ApplicationConfiguration.applicationModuleName).run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate, $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout) {
             var retainCounter = 0;
 
             var spinnerUrl = 'img/spinner.svg';
@@ -121,6 +89,7 @@ var ApplicationConfiguration = (function(){
             });
 
             function setStatusBar(aState) {
+                /*
                 if (window.StatusBar) {
 
                     if ( 'list.cargo' === aState.name || 'signin' === aState.name ) {
@@ -137,6 +106,7 @@ var ApplicationConfiguration = (function(){
                     }
 
                 }
+                */
             }
             function setBackdropStatusBar() {
                 if (window.StatusBar) {
@@ -179,6 +149,7 @@ var ApplicationConfiguration = (function(){
             function showOfflineAlert() {
                 if (!offlinePopupShown) {
                     offlinePopupShown = true;
+                    /*
                     $ionicPopup.alert({
                         cssClass: 'red',
                         title: '<i class="ion-close"></i>No internet connection',
@@ -187,6 +158,7 @@ var ApplicationConfiguration = (function(){
                     }).then(function () {
                         offlinePopupShown = false;
                     });
+                    */
                 }
             }
 
