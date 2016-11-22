@@ -28,8 +28,8 @@ const ApplicationConfiguration = (function(){
 
                 $ionicConfigProvider.views.maxCache(0);
                 //$ionicConfigProvider.tabs.position('bottom');
-                $ionicConfigProvider.views.swipeBackEnabled(false);
-                //$ionicConfigProvider.views.transition('android');
+                $ionicConfigProvider.views.swipeBackEnabled(true);
+                $ionicConfigProvider.views.transition('android');
 
                 if (!ionic.Platform.isAndroid() && !ionic.Platform.isIOS()) {
                     $ionicConfigProvider.scrolling.jsScrolling(false);
