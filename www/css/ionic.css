@@ -9779,7 +9779,6 @@ fittable-image {
     bottom: 0;
     left: 0;
     right: 0;
-    background-image: url(../img/bg.jpg);
     background-size: 100% auto;
     background-repeat: no-repeat;
     background-position: 50% 0;
@@ -11104,13 +11103,11 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
       transform: translate(-50%, -50%); }
 
 .modal.small {
-  background-image: url(../img/bg.jpg);
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: 50% 0; }
 
 ion-view {
-  background-image: url(../img/bg.jpg);
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: 50% 0; }
@@ -11118,7 +11115,6 @@ ion-view {
     padding: 22.5px; }
 
 .bar.bar-deepblue {
-  background-image: url(../img/bg.jpg);
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: 50% 0;
@@ -11154,7 +11150,6 @@ input.input-element, input.input-element.form-control {
   top: 0 !important;
   transition: none !important;
   z-index: 9999999;
-  background-image: url(../img/bg.jpg);
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: 50% 0;

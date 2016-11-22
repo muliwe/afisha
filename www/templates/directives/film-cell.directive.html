@@ -1,9 +1,20 @@
-<ion-item class="film_cell" ng-click="openFilm(film)">
-    <div class="row car_info">
-        <div class="car_info__left">
-            <p class="car_title">
-                {{title}}
-            </p>
+<ion-item class="film_cell" ng-click="full ? null : openFilm(film)">
+    <div class="well">
+        <h2 ng-if="full">{{film.title}}</h2>
+
+        <img  ng-if="film.poster" class="img-vert" src="{{film.poster}}" alt="{{film.title}}">
+
+        <div class="media-right">
+
+            <h4 ng-if="!full">{{film.title}}</h4>
+
+            <div><b>{{film.age || 0}}+</b></div>
+
+            <div><i>Комиксы / фэнтэзи</i></div>
+
+            <div><b>Широкий прокат</b></div>
+
+            <p ng-if="full">{{film.anons}}</p>
         </div>
     </div>
 </ion-item>

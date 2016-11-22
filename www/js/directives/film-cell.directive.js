@@ -7,13 +7,14 @@ angular.module('afisha').directive('filmCell', ['$state',
        templateUrl: 'templates/directives/film-cell.directive.html',
        scope: {
            title: '@title',
+           full: '@full',
            film: '='
        },
        link: function (scope, element, attr) {
            scope.openFilm = function (film) {
-               if (cargo && cargo.id) {
+               if (film && film.id) {
                    $state.go('film', {filmId: film.id});
-               } 
+               }
            };
 
        }

@@ -4,11 +4,11 @@ angular.module('afisha').controller('HomeController',
         setCityName();
 
         $scope.$watch(function() {
-            return 'Moscow';
+            return 'Москва';
         }, setCityName);
 
         function setCityName() {
-            $scope.cityName = 'Moscow';
+            $scope.cityName = 'Москва';
         }
     }
 ]);

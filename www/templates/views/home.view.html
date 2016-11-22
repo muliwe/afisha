@@ -1,20 +1,20 @@
 <ion-side-menus>
-    <ion-side-menu side="left">
+    <ion-side-menu side="right" enable-menu-with-back-views="true">
         <header class="bar bar-header bar-stable">
-            <h1 class="title">Side Menu</h1>
+            <h1 class="title">Афиша</h1>
         </header>
         <div class="side-menu-content has-header">
             <ion-list>
                 <ion-item>{{cityName}}</ion-item>
-                <ion-item menu-close go-cities>Cities</ion-item>
-                <ion-item menu-close go-films>Films</ion-item>
-                <ion-item menu-close go-cinemas>Cinemas</ion-item>
+                <ion-item menu-close go-films>Фильмы</ion-item>
+                <ion-item menu-close go-cinemas>Кинотеатры</ion-item>
+                <ion-item menu-close go-cities>Другие города</ion-item>
             </ion-list>
         </div>
 
     </ion-side-menu>
 
-    <ion-side-menu-content drag-content="false">
+    <ion-side-menu-content drag-content="true">
         <ion-nav-view></ion-nav-view>
     </ion-side-menu-content>
 

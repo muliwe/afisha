@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('afisha').controller('ListFilmsController',
-    ['$scope', '$state',
-    function($scope, $state) {
+angular.module('afisha').controller('FilmController',
+    ['$scope', '$state', '$stateParams',
+    function($scope, $state, $stateParams) {
         $scope.films = [
             {"id":1,"title":"Доктор Стрэндж","age":"16","shows":58274,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/28/160928110516678.jpg", "anons": "Главная героиня общается с инопланетянами и вспоминает погибшую дочь"},
             {"id":2,"title":"Инферно","age":"16","shows":5843,"poster":"http://s2.kassa.rl0.ru/StaticContent/P/Img/1610/11/161011103842547.jpg", "anons": "Профессор Лэнгдон снова спасает мир"},
@@ -12,10 +12,11 @@ angular.module('afisha').controller('ListFilmsController',
             {"id":6,"title":"Дуэлянт","age":"16","shows":1600,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/08/160908104500630.jpg", "anons": "Сложносочинённая роосийская костюмная дама о проклятии в позапрошлом веке"}
         ];
 
-        $scope.getFilmList = function(){
-            let resourse = null;
+        $scope.film = {};
+        $scope.filmId = +$stateParams.filmId;
 
-            return resourse;
+        $scope.getFilm = function(){
+            $scope.film = $scope.films.filter(film => film.id === $scope.filmId)[0] || {};
         };
 
         $scope.refreshList = function () {
