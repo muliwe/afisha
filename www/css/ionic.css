@@ -9705,7 +9705,7 @@ fittable-image {
     color: #fff; }
 
 .bar-cargo-list {
-  height: 96px;
+  height: 48px;
   transition: -webkit-transform 0.25s ease;
   transition: transform 0.25s ease;
   transition: transform 0.25s ease, -webkit-transform 0.25s ease; }
@@ -9726,7 +9726,7 @@ fittable-image {
   top: 0 !important;
   padding-top: 0 !important; }
   .cargo-list.has-header > .scroll {
-    padding-top: 96px; }
+    padding-top: 48px; }
 
 .search-form {
   position: relative; }
