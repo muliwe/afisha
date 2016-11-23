@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('afisha').controller('FilmController',
+angular.module('afisha').controller('CinemaController',
     ['$scope', '$state', '$stateParams',
     function($scope, $state, $stateParams) {
         $scope.films = [
@@ -12,17 +12,17 @@ angular.module('afisha').controller('FilmController',
             {"id":6,"title":"Дуэлянт","age":"16","shows":1600,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/08/160908104500630.jpg", "anons": "Сложносочинённая роосийская костюмная дама о проклятии в позапрошлом веке"}
         ];
 
-        $scope.film = {};
-        $scope.filmId = +$stateParams.filmId;
-
-        $scope.getFilm = function(){
-            $scope.film = $scope.films.filter(film => film.id === $scope.filmId)[0] || {};
-        };
-
         $scope.cinemas = [
             {"id":298,"title":"Каро 9 Атриум","address":"Земляной Вал, 33, ТРК «Атриум»","latitude":55.757223,"longitude":37.658958,"metro":"Курская, Чкаловская","rate":3.6,"city":2},
             {"id":68122,"title":"Мираж Синема Арбат","address":"Артема, 96, ТЦ «Арбат»","latitude":53.623129,"longitude":55.901976,"metro":"","rate":0.0,"city":2605}
         ];
+
+        $scope.cinema = {};
+        $scope.cinemaId = +$stateParams.cinemaId;
+
+        $scope.getCinema = function(){
+            $scope.cinema = $scope.cinemas.filter(cinema => cinema.id === $scope.cinemaId)[0] || {};
+        };
 
         $scope.refreshList = function () {
             $scope.getFilmList().$promise.finally(function () {

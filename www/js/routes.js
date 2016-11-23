@@ -19,6 +19,12 @@ angular.module('afisha').config(['$stateProvider', '$urlRouterProvider',
                 controller: 'FilmController',
                 templateUrl: 'templates/views/film.view.html'
             })
+
+            .state('cinema', {
+                url: '/cinema/:cinemaId',
+                controller: 'CinemaController',
+                templateUrl: 'templates/views/cinema.view.html'
+            })
             ;
     }
 ]);

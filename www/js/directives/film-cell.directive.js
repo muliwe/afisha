@@ -6,7 +6,6 @@ angular.module('afisha').directive('filmCell', ['$state',
        restrict: 'E',
        templateUrl: 'templates/directives/film-cell.directive.html',
        scope: {
-           title: '@title',
            full: '@full',
            film: '='
        },
