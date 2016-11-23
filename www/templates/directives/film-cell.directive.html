@@ -2,7 +2,7 @@
     <div class="well">
         <h2 ng-if="full">{{film.title}}</h2>
 
-        <img  ng-if="film.poster" class="img-vert" src="{{film.poster}}" alt="{{film.title}}">
+        <img ng-if="film && film.poster" class="img-vert" src="{{film.poster}}" alt="{{film.title}}">
 
         <div class="media-right">
 
