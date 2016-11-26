@@ -1,14 +1,16 @@
 'use strict';
 angular.module('afisha').controller('HomeController',
-    ['$scope', function($scope) {
+    ['$scope', 'common', function($scope, common) {
+        $scope.cityName = '';
+
         setCityName();
 
         $scope.$watch(function() {
-            return 'Москва';
+            return common.currentCity.title;
         }, setCityName);
 
         function setCityName() {
-            $scope.cityName = 'Москва';
+            $scope.cityName = common.currentCity.title;
         }
     }
 ]);

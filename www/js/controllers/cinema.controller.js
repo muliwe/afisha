@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afisha').controller('CinemaController',
-    ['$scope', '$state', '$stateParams',
-    function($scope, $state, $stateParams) {
+    ['$scope', '$state', '$stateParams', 'common',
+    function($scope, $state, $stateParams, common) {
         $scope.films = [
             {"id":1,"title":"Доктор Стрэндж","age":"16","shows":58274,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/28/160928110516678.jpg", "anons": "Главная героиня общается с инопланетянами и вспоминает погибшую дочь"},
             {"id":2,"title":"Инферно","age":"16","shows":5843,"poster":"http://s2.kassa.rl0.ru/StaticContent/P/Img/1610/11/161011103842547.jpg", "anons": "Профессор Лэнгдон снова спасает мир"},
@@ -24,17 +24,13 @@ angular.module('afisha').controller('CinemaController',
             $scope.cinema = $scope.cinemas.filter(cinema => cinema.id === $scope.cinemaId)[0] || {};
         };
 
-        $scope.refreshList = function () {
-            $scope.getFilmList().$promise.finally(function () {
-                $scope.$broadcast('scroll.refreshComplete');
-            });
-        };
+        $scope.city = common.currentCity;
+        $scope.date = common.currentDate;
 
         $scope.openFilm = function () {
             $state.go('film', {
                 filmId: film.id
             });
-
         };
     }
 ]);
