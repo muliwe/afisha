@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('afisha').directive('cinemaScheduleCell', ['$state',
-    function($state) {
+   function($state) {
    return {
        restrict: 'E',
        templateUrl: 'templates/directives/cinema-schedule-cell.directive.html',

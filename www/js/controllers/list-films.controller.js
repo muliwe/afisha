@@ -28,7 +28,6 @@ angular.module('afisha').controller('ListFilmsController',
             $state.go('film', {
                 filmId: film.id
             });
-
         };
     }
 ]);

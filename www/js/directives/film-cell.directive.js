@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('afisha').directive('filmCell', ['$state',
-    function($state) {
+   function($state) {
    return {
        restrict: 'E',
        templateUrl: 'templates/directives/film-cell.directive.html',
