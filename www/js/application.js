@@ -4,7 +4,8 @@ const ApplicationConfiguration = (function(){
     const applicationModuleName = 'afishaApp';
     const applicationModuleVendorDependencies = [
         'app.core',
-        'afisha'
+        'afisha',
+        'constants'
     ];
     const module_defers = [];
     const registerModule = function(moduleName, dependencies){
