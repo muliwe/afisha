@@ -136,3 +136,33 @@ img.img-vert2 {
     clear: both;
     height: 0;
 }
+
+calendar-nav {
+    margin: 0 -2px 10px -1px;
+}
+
+calendar-nav .calendar-nav {
+    margin-top: -20px;
+}
+
+.calendar-nav a {
+    font-size: 10px;
+    padding: 0 !important;
+    min-width: 42px;
+}
+
+.button-bar > .button:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.button-bar > .button:last-child {
+    border-radius: 0 2px 2px 0;
+}
+
+.button.button-positive {
+    background-color: #666;
+}
+
+.button.button-positive.activated {
+    background-color: #999;
+}

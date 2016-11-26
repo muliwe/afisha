@@ -15,7 +15,6 @@ angular.module('afisha').directive('filmCell', ['$state',
                    $state.go('film', {filmId: film.id});
                }
            };
-
        }
    };
 }]);

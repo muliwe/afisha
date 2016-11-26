@@ -12,7 +12,6 @@
 
     </ion-nav-bar>
 
-
     <ion-content class="films-list">
 
         <ion-list can-swipe="false">
@@ -20,6 +19,8 @@
         </ion-list>
 
         <h3>Расписание сеансов</h3>
+
+        <calendar-nav film="film" date="date"></calendar-nav>
 
         <ion-list can-swipe="false">
             <cinema-schedule-cell cinema="cinema" one-film="true"
