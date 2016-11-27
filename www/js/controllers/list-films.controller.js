@@ -24,7 +24,7 @@ angular.module('afisha').controller('ListFilmsController',
             });
         };
 
-        $scope.openFilm = function () {
+        $scope.openFilm = function (film) {
             $state.go('film', {
                 filmId: film.id
             });

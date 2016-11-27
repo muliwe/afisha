@@ -14,6 +14,18 @@ angular.module('afisha').config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'templates/views/list-films.view.html'
             })
 
+            .state('cities', {
+                url: '/cities',
+                controller: 'ListCitiesController',
+                templateUrl: 'templates/views/list-cities.view.html'
+            })
+
+            .state('cinemas', {
+                url: '/city/:cityId',
+                controller: 'ListCinemasController',
+                templateUrl: 'templates/views/list-cinemas.view.html'
+            })
+
             .state('film', {
                 url: '/film/:filmId',
                 controller: 'FilmController',
@@ -25,6 +37,7 @@ angular.module('afisha').config(['$stateProvider', '$urlRouterProvider',
                 controller: 'CinemaController',
                 templateUrl: 'templates/views/cinema.view.html'
             })
+
             ;
     }
 ]);

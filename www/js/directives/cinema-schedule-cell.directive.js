@@ -9,7 +9,8 @@ angular.module('afisha').directive('cinemaScheduleCell', ['$state',
            byHalls: '@byHalls',
            cinema: '=',
            film: '=',
-           oneFilm: '@oneFilm'
+           oneFilm: '@oneFilm',
+           noSchedule: '@noSchedule'
        },
        link: function (scope, element, attr) {
            scope.openCinema = function (cinema) {

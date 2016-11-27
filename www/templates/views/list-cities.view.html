@@ -4,20 +4,14 @@
             <button class="button button-icon ion-navicon-round light button--toggle-sidemenu" menu-toggle="right"></button>
         </ion-nav-buttons>
 
-        <ion-nav-title>Фильмы</ion-nav-title>
+        <ion-nav-title>Города</ion-nav-title>
 
     </ion-nav-bar>
 
     <ion-content class="films-list">
-        <ion-refresher
-          class="cargo-list__refresher"
-          pulling-text="Pull to refresh"
-          spinner = "none"
-          on-refresh="refreshList()">
-        </ion-refresher>
 
 	  <ion-list can-swipe="false">
-                <film-cell film="film" ng-repeat="film in films"></film-cell>
+                <city-cell city="city" ng-repeat="city in cities"></city-cell>
       </ion-list>
 
     </ion-content>
