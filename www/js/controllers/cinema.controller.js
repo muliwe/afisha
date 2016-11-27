@@ -27,6 +27,13 @@ angular.module('afisha').controller('CinemaController',
         $scope.city = common.currentCity;
         $scope.date = common.currentDate;
 
+        $scope.currentCity = common.currentCity;
+
+        $scope.saveCity = function () {
+            common.currentCity = $scope.city;
+            $scope.currentCity = $scope.city;
+        };
+
         $scope.openFilm = function (film) {
             $state.go('film', {
                 filmId: film.id

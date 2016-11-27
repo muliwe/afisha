@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afisha').controller('ListCinemasController',
-    ['$scope', '$state', '$stateParams',
-    function($scope, $state, $stateParams) {
+    ['$scope', '$state', '$stateParams', 'common',
+    function($scope, $state, $stateParams, common) {
         $scope.cities = [
             {"id":2,"title":"Москва","latitude":55.7495307478992,"longitude":37.6213073730469},
             {"id":3,"title":"Санкт-Петербург","latitude":59.9281838236965,"longitude":30.3236389160156},
@@ -24,6 +24,13 @@ angular.module('afisha').controller('ListCinemasController',
 
         $scope.getCityCinemas = function(){
             $scope.city = $scope.cities.filter(city => city.id === $scope.cityId)[0] || {};
+        };
+
+        $scope.currentCity = common.currentCity;
+
+        $scope.saveCity = function () {
+            common.currentCity = $scope.city;
+            $scope.currentCity = $scope.city;
         };
 
         $scope.openCinema= function (cinema) {

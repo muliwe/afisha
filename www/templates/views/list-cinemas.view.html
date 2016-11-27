@@ -14,6 +14,15 @@
 
     <ion-content class="films-list">
 
+        <div class="button-bar" ng-show="city.id !== currentCity.id" >
+            <a class="button"
+               ng-click="saveCity()">Сохранить {{city.title}}</a>
+        </div>
+
+        <div class="button-bar" ng-show="city.id === currentCity.id" >
+            {{city.title}} &#151; мой город
+        </div>
+
         <h3>Список кинотеатров</h3>
 
         <ion-list can-swipe="false">

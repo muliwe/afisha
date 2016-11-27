@@ -19,6 +19,11 @@
             <cinema-cell cinema="cinema"></cinema-cell>
         </ion-list>
 
+        <div class="button-bar" ng-show="cinema.city !== currentCity.id" >
+            <a class="button"
+               ng-click="saveCity()">Сохранить {{city.title}}</a>
+        </div>
+
         <h3>Репертуар</h3>
 
         <ion-list can-swipe="false">
