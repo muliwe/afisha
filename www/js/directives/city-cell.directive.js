@@ -6,7 +6,8 @@ angular.module('afisha').directive('cityCell', ['$state',
        restrict: 'E',
        templateUrl: 'templates/directives/city-cell.directive.html',
        scope: {
-           city: '='
+           city: '=',
+           current: '='
        },
        link: function (scope, element, attr) {
            scope.openCity = function (city) {

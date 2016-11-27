@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afisha').controller('ListCitiesController',
-    ['$scope', '$state',
-    function($scope, $state) {
+    ['$scope', '$state', 'common',
+    function($scope, $state, common) {
         $scope.cities = [
             {"id":2,"title":"Москва","latitude":55.7495307478992,"longitude":37.6213073730469},
             {"id":3,"title":"Санкт-Петербург","latitude":59.9281838236965,"longitude":30.3236389160156},
@@ -19,6 +19,8 @@ angular.module('afisha').controller('ListCitiesController',
 
             return resourse;
         };
+
+        $scope.currentCity = common.currentCity;
 
         $scope.refreshList = function () {
             $scope.getCitiesList().$promise.finally(function () {

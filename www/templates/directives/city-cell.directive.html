@@ -1,5 +1,6 @@
 <ion-item class="city_cell" ng-click="openCity(city)">
     <div class="well">
-        <h2>{{city.title}}</h2>
+        <h3 ng-show="city.id === current.id"><b>{{city.title}}</b></h3>
+        <h3 ng-show="city.id !== current.id">{{city.title}}</h3>
     </div>
 </ion-item>
