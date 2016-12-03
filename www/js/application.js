@@ -202,7 +202,12 @@ const ApplicationConfiguration = (function(){
 
             if (localStorageService.get('currentCity')) {
                 common.currentCity = JSON.parse(localStorageService.get('currentCity'));
-                console.log(common.currentCity);
+                // console.log(common.currentCity);
+            }
+
+            if (localStorageService.get('savedCinemas')) {
+                common.savedCinemas = JSON.parse(localStorageService.get('savedCinemas'));
+                // console.log(common.savedCinemas);
             }
         });
 

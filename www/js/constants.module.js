@@ -8,5 +8,6 @@ angular.module('constants').constant('common', {
         title: 'Москва',
         latitude: 55.7495307478992,
         longitude: 37.6213073730469
-    }
+    },
+    savedCinemas: []
 });

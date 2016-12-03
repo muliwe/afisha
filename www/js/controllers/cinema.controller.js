@@ -29,6 +29,20 @@ angular.module('afisha').controller('CinemaController',
 
         $scope.currentCity = common.currentCity;
 
+        canRecount();
+
+        $scope.saveCinema = function () {
+            common.savedCinemas.push($scope.cinema);
+            localStorageService.set('savedCinemas', JSON.stringify(common.savedCinemas));
+            canRecount();
+        };
+
+        $scope.cancelCinema = function () {
+            common.savedCinemas = common.savedCinemas.filter(cinema => cinema.id !== $scope.cinemaId);
+            localStorageService.set('savedCinemas', JSON.stringify(common.savedCinemas));
+            canRecount();
+        };
+
         $scope.saveCity = function () {
             common.currentCity = $scope.city;
             $scope.currentCity = $scope.city;
@@ -40,5 +54,15 @@ angular.module('afisha').controller('CinemaController',
                 filmId: film.id
             });
         };
+
+        function canRecount() {
+            $scope.canSave = $scope.cinema.city === $scope.currentCity.id &&
+                (common.savedCinemas.filter(cinema => cinema.id === $scope.cinemaId)).length === 0;
+
+            $scope.canCancel = $scope.cinema.city === $scope.currentCity.id &&
+                (common.savedCinemas.filter(cinema => cinema.id === $scope.cinemaId)).length === 1;
+
+            $scope.canSaveCity = $scope.cinema.city !== $scope.currentCity.id;
+        }
     }
 ]);

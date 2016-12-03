@@ -19,9 +19,16 @@
             <cinema-cell cinema="cinema"></cinema-cell>
         </ion-list>
 
-        <div class="button-bar" ng-show="cinema.city !== currentCity.id" >
-            <a class="button"
-               ng-click="saveCity()">Сохранить {{city.title}}</a>
+        <div class="button-bar" ng-show="canSaveCity">
+            <a class="button" ng-click="saveCity()">Сохранить {{city.title}}</a>
+        </div>
+
+        <div class="button-bar" ng-show="canSave">
+            <a class="button" ng-click="saveCinema()">Запомнить кинотеатр</a>
+        </div>
+
+        <div class="button-bar" ng-show="canCancel">
+            Сохранённый кинотеатр: <a class="button assertive" ng-click="cancelCinema()">X</a>
         </div>
 
         <h3>Репертуар</h3>
