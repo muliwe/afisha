@@ -19,12 +19,14 @@ const ApplicationConfiguration = (function(){
     if(window.location.hash === '#_=_') window.location.hash = '#!';
     angular.element(document).ready(function(){
 
-        angular.module(ApplicationConfiguration.applicationModuleName, ApplicationConfiguration.applicationModuleVendorDependencies);
+        angular.module(ApplicationConfiguration.applicationModuleName,
+            ApplicationConfiguration.applicationModuleVendorDependencies);
         module_defers.forEach(function(module){
             angular.module(applicationModuleName).requires.push(module.moduleName);
         });
-        angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider', '$urlRouterProvider', '$ionicConfigProvider',
-            function($locationProvider, $urlRouterProvider, $ionicConfigProvider){
+        angular.module(ApplicationConfiguration.applicationModuleName)
+            .config(['$locationProvider', '$urlRouterProvider', '$ionicConfigProvider', 'localStorageServiceProvider',
+            function($locationProvider, $urlRouterProvider, $ionicConfigProvider, localStorageServiceProvider){
                 $locationProvider.hashPrefix('!');
 
                 $ionicConfigProvider.views.maxCache(0);
@@ -42,9 +44,13 @@ const ApplicationConfiguration = (function(){
                 // remove backbutton previous text
                 $ionicConfigProvider.backButton.previousTitleText(false);
 
+                localStorageServiceProvider
+                    .setPrefix('afisha');
             }
         ]);
-        angular.module(ApplicationConfiguration.applicationModuleName).run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate, $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout) {
+        angular.module(ApplicationConfiguration.applicationModuleName)
+            .run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate,
+                $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout, common, localStorageService) {
             let retainCounter = 0;
 
             const spinnerUrl = 'img/spinner.svg';
@@ -193,6 +199,11 @@ const ApplicationConfiguration = (function(){
                 });
 
             });
+
+            if (localStorageService.get('currentCity')) {
+                common.currentCity = JSON.parse(localStorageService.get('currentCity'));
+                console.log(common.currentCity);
+            }
         });
 
         // APP START

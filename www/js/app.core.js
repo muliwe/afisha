@@ -5,6 +5,7 @@ angular.module('app.core', [
     'ngAnimate',
     'ngSanitize',
     'ui.router',
+    'LocalStorageModule',
     'ionic',
     'ngCordova'
 ]);

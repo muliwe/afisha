@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afisha').controller('ListCinemasController',
-    ['$scope', '$state', '$stateParams', 'common',
-    function($scope, $state, $stateParams, common) {
+    ['$scope', '$state', '$stateParams', 'common', 'localStorageService',
+    function($scope, $state, $stateParams, common, localStorageService) {
         $scope.cities = [
             {"id":2,"title":"Москва","latitude":55.7495307478992,"longitude":37.6213073730469},
             {"id":3,"title":"Санкт-Петербург","latitude":59.9281838236965,"longitude":30.3236389160156},
@@ -31,6 +31,7 @@ angular.module('afisha').controller('ListCinemasController',
         $scope.saveCity = function () {
             common.currentCity = $scope.city;
             $scope.currentCity = $scope.city;
+            localStorageService.set('currentCity', JSON.stringify($scope.city));
         };
 
         $scope.openCinema= function (cinema) {
