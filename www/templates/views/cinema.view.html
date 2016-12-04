@@ -16,7 +16,7 @@
     <ion-content class="films-list">
 
         <ion-list can-swipe="false">
-            <cinema-cell cinema="cinema"></cinema-cell>
+            <cinema-cell cinema="cinema" city="city"></cinema-cell>
         </ion-list>
 
         <div class="button-bar" ng-show="canSaveCity">
@@ -28,7 +28,7 @@
         </div>
 
         <div class="button-bar" ng-show="canCancel">
-            Сохранённый кинотеатр: <a class="button assertive" ng-click="cancelCinema()">X</a>
+            Сохранённый кинотеатр&nbsp;&nbsp; <a class="button assertive" ng-click="cancelCinema()">X</a>
         </div>
 
         <h3>Репертуар</h3>

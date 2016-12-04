@@ -6,8 +6,8 @@ angular.module('afisha').directive('cinemaCell', ['$state',
        restrict: 'E',
        templateUrl: 'templates/directives/cinema-cell.directive.html',
        scope: {
-           full: '@full',
-           cinema: '='
+           cinema: '=',
+           city: '='
        },
        link: function (scope, element, attr) {
        }
