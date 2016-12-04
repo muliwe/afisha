@@ -3,10 +3,7 @@
 angular.module('afisha').controller('ListCinemasController',
     ['$scope', '$state', '$stateParams', 'serverService', 'localStorageService', 'common',
     function($scope, $state, $stateParams, serverService, localStorageService, common) {
-        $scope.cinemas = [
-            {"id":298,"title":"Каро 9 Атриум","address":"Земляной Вал, 33, ТРК «Атриум»","latitude":55.757223,"longitude":37.658958,"metro":"Курская, Чкаловская","rate":3.6,"city":2},
-            {"id":68122,"title":"Мираж Синема Арбат","address":"Артема, 96, ТЦ «Арбат»","latitude":53.623129,"longitude":55.901976,"metro":"","rate":0.0,"city":2605}
-        ];
+        $scope.cinemas = [];
 
         $scope.city = {};
         $scope.cityId = +$stateParams.cityId;

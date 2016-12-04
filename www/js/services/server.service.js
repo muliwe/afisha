@@ -63,4 +63,13 @@ angular.module('afisha').service('serverService', function($http, common) {
             });
         });
     };
+
+    self.fetchCinema = (cinemaId, cb) => {
+        self.fetchCities((err, cities) => {
+            self.fetchCinemas((err, cinemas) => {
+                let cinema = cinemas.filter(cinema => cinema.id === cinemaId)[0] || {};
+                cb(cinema, cities.filter(city => city.id === cinema.city)[0] || {});
+            });
+        });
+    };
 });
