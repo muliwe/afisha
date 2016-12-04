@@ -23,11 +23,19 @@
             {{city.title}} &#151; мой город
         </div>
 
-        <h3>Список кинотеатров</h3>
+        <h3 ng-if="savedCinemas.length">Ваши кинотеатры</h3>
 
-        <ion-list can-swipe="false">
+        <ion-list  ng-if="savedCinemas.length" can-swipe="false">
             <cinema-schedule-cell cinema="cinema" no-schedule="true"
-                       ng-repeat="cinema in cinemas">
+                       ng-repeat="cinema in savedCinemas">
+            </cinema-schedule-cell>
+        </ion-list>
+
+        <h3 ng-if="cinemas.length">Список кинотеатров</h3>
+
+        <ion-list  ng-if="cinemas.length" can-swipe="false">
+            <cinema-schedule-cell cinema="cinema" no-schedule="true"
+                                  ng-repeat="cinema in cinemas">
             </cinema-schedule-cell>
         </ion-list>
 
