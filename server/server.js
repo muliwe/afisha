@@ -19,13 +19,18 @@ app.use('/cities', function(req, res, next) {
   res.end(JSON.stringify(data.cities));
 });
 
-app.use('/cinemas/', function(req, res, next) {
-  const cinemaId = parseInt(req.originalUrl.replace('/cinemas/', ''), 10);
+app.use('/cinemas', function(req, res, next) {
+  const cityId = parseInt(req.originalUrl.replace('/cinemas/', ''), 10);
 
   res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
-  res.end(JSON.stringify(data.cinemas.filter(function (cinema) {
-      return cinema.city === cinemaId;
-  })));
+
+  if (!cityId && isNaN(cityId)) {
+      res.end(JSON.stringify(data.cinemas));
+  } else {
+      res.end(JSON.stringify(data.cinemas.filter(function (cinema) {
+          return cinema.city === cityId;
+      })));
+  }
 });
 
 app.use('/film/', function(req, res, next) {
@@ -53,7 +58,8 @@ app.use('/', function(req, res, next) {
   res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
   res.end(JSON.stringify({
       started: started.toISOString(),
-      running: timeDiffFormat((new Date().getTime() - started.getTime()) / 1000)
+      running: timeDiffFormat((new Date().getTime() - started.getTime()) / 1000),
+      originalUrl: req.originalUrl
   }));
 });
 

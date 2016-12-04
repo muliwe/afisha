@@ -50,7 +50,8 @@ const ApplicationConfiguration = (function(){
         ]);
         angular.module(ApplicationConfiguration.applicationModuleName)
             .run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate,
-                $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout, common, localStorageService) {
+                $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout, common, localStorageService,
+                serverService) {
             let retainCounter = 0;
 
             const spinnerUrl = 'img/spinner.svg';
@@ -209,6 +210,10 @@ const ApplicationConfiguration = (function(){
                 common.savedCinemas = JSON.parse(localStorageService.get('savedCinemas'));
                 // console.log(common.savedCinemas);
             }
+
+            serverService.fetchCities((err, cities) => {
+                console.log(err, cities);
+            });
         });
 
         // APP START

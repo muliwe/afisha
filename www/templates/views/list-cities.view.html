@@ -1,4 +1,4 @@
-<ion-view class="background" ng-init="" cache-view="false">
+<ion-view class="background" ng-init="getCitiesList()" cache-view="false">
     <ion-nav-bar class="bar-transparent bar">
         <ion-nav-buttons side="right">
             <button class="button button-icon ion-navicon-round light button--toggle-sidemenu" menu-toggle="right"></button>
@@ -11,7 +11,8 @@
     <ion-content class="films-list">
 
 	  <ion-list can-swipe="false">
-                <city-cell city="city" current="currentCity" ng-repeat="city in cities"></city-cell>
+          <city-cell city="city" current="true" ng-if="city.id"></city-cell>
+          <city-cell city="aCity" ng-repeat="aCity in cities"></city-cell>
       </ion-list>
 
     </ion-content>
