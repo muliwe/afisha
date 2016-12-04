@@ -18,7 +18,6 @@ angular.module('afisha').controller('CinemaController',
 
         $scope.getCinema = function(){
             serverService.fetchCinema($scope.cinemaId, (cinema, city) => {
-                console.log(cinema, city);
                 $scope.cinema = cinema;
                 $scope.city = city;
                 canRecount();
