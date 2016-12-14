@@ -20,11 +20,11 @@ app.use(cors());
 
 init();
 
-app.use('/cities', function (req, res, next) {
+app.use('/cities', (req, res, next) => {
     sendResponse(data.cities, res);
 });
 
-app.use('/cinemas', function (req, res, next) {
+app.use('/cinemas', (req, res, next) => {
     const cityId = parseInt(req.originalUrl.replace('/cinemas/', ''), 10);
 
     if (req.originalUrl === '/cinemas') {
@@ -36,7 +36,7 @@ app.use('/cinemas', function (req, res, next) {
     }
 });
 
-app.use('/films', function (req, res, next) {
+app.use('/films', (req, res, next) => {
     const cityId = parseInt(req.originalUrl.replace('/films/', ''), 10);
 
     if (req.originalUrl === '/films') {
@@ -48,7 +48,7 @@ app.use('/films', function (req, res, next) {
     }
 });
 
-app.use('/film/', function (req, res, next) {
+app.use('/film/', (req, res, next) => {
     const filmId = parseInt(req.originalUrl.replace('/film/', ''), 10);
 
     if (films[filmId]) {
@@ -58,18 +58,18 @@ app.use('/film/', function (req, res, next) {
     }
 });
 
-app.use('/show/', function (req, res, next) {
+app.use('/show/', (req, res, next) => {
     const filmId = parseInt(req.originalUrl.replace(/^\/show\/([0-9]+)\/.*$/, '$1'), 10);
     const cinemaId = parseInt(req.originalUrl.replace(/^\/show\/([0-9]+)\/(.*)$/, '$2'), 10);
 
-    sendResponse(data.shows.filter(function (show) {
+    sendResponse(data.shows.filter(function(show) {
         return show.film === filmId && show.cinema === cinemaId;
     }), res);
 });
 
 app.use(serveStatic(__dirname + '/../www/'));
 
-app.use('/', function (req, res, next) {
+app.use('/', (req, res, next) => {
     if (req.originalUrl === '/') {
         sendResponse({
             started: started.toISOString(),
@@ -86,20 +86,20 @@ http.createServer(app).listen(process.env.PORT || 3000);
 console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
 function init () {
-    data.cities.forEach(function (city) {
+    data.cities.forEach(city => {
         cities[city.id] = JSON.parse(JSON.stringify(city)); // clone instance
         cities[city.id].cinemas = [];
         cities[city.id].films = [];
     });
 
-    data.films.forEach(function (film) {
+    data.films.forEach(film => {
         films[film.id] = film;
-        data.cities.forEach(function (city) {
+        data.shows.forEach(city => {
             cities[city.id].films.push(film);
         });
     });
 
-    data.cinemas.forEach(function (cinema) {
+    data.cinemas.forEach(cinema => {
         cinemas[cinema.id] = cinema;
         cities[cinema.city].cinemas.push(cinema);
     });
@@ -121,12 +121,12 @@ function timeDiffFormat(diff) {
 }
 
 function sendResponse(data, res) {
-    res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
     res.end(JSON.stringify(data));
 }
 
 function notFound(message, res) {
-    res.writeHead(404, {"Content-Type": "application/json; charset=utf-8"});
+    res.writeHead(404, {'Content-Type': 'application/json; charset=utf-8'});
     res.end(JSON.stringify({
         error: {
             name: 'Error',
