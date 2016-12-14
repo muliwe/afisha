@@ -86,6 +86,8 @@ http.createServer(app).listen(process.env.PORT || 3000);
 console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
 function init () {
+    let cityFilmMap = {};
+
     data.cities.forEach(city => {
         cities[city.id] = JSON.parse(JSON.stringify(city)); // clone instance
         cities[city.id].cinemas = [];
@@ -94,14 +96,24 @@ function init () {
 
     data.films.forEach(film => {
         films[film.id] = film;
-        data.shows.forEach(city => {
-            cities[city.id].films.push(film);
-        });
     });
 
     data.cinemas.forEach(cinema => {
         cinemas[cinema.id] = cinema;
         cities[cinema.city].cinemas.push(cinema);
+    });
+
+    data.shows.forEach(show => {
+        if (!cinemas[show.cinema] || !films[show.film]) {
+            return;
+        }
+
+        const key = `${cinemas[show.cinema].city}_${show.film}`;
+
+        if (!cityFilmMap[key]) {
+            cities[cinemas[show.cinema].city].films.push(films[show.film]);
+            cityFilmMap[key] = true;
+        }
     });
 }
 
