@@ -1,4 +1,5 @@
 const connect = require('connect');
+const query = require('connect-query');
 const http = require('http');
 const cors = require('cors');
 const app = connect();
@@ -11,12 +12,15 @@ const data = require('../data/rambler.json');
 const cities = {};
 const cinemas = {};
 const films = {};
+const filmsWithShows = {};
+const cinemasWithoutShows = {};
 
 const started = new Date();
 
 app.use(compression());
 app.use(bodyParser.json({extended: false}));
 app.use(cors());
+app.use(query());
 
 init();
 
@@ -60,8 +64,11 @@ app.use('/films', (req, res, next) => {
 
 app.use('/film/', (req, res, next) => {
     const filmId = parseInt(req.originalUrl.replace('/film/', ''), 10);
+    const cityId = parseInt(req.query.showsFor, 10);
 
-    if (films[filmId]) {
+    if (filmsWithShows[`${cityId}_${filmId}`]) {
+        sendResponse(filmsWithShows[`${cityId}_${filmId}`], res);
+    } else if (films[filmId]) {
         sendResponse(films[filmId], res);
     } else {
         notFound(`Can't find film ${filmId}`, res);
@@ -88,6 +95,7 @@ console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
 function init () {
     let cityFilmMap = {};
+    let cityFilmCinemaMap = {};
     let cinemaFilmMap = {};
 
     data.cities.forEach(city => {
@@ -101,6 +109,7 @@ function init () {
     });
 
     data.cinemas.forEach(cinema => {
+        cinemasWithoutShows[cinema.id] = JSON.parse(JSON.stringify(cinema)); // clone instance;
         cinemas[cinema.id] = JSON.parse(JSON.stringify(cinema)); // clone instance;
         cinemas[cinema.id].films = [];
         cinemas[cinema.id].shows = [];
@@ -108,15 +117,21 @@ function init () {
     });
 
     data.shows.forEach(show => {
-        if (!cinemas[show.cinema] || !films[show.film]) {
+        if (!cinemas[show.cinema] || !films[show.film] || !cinemasWithoutShows[show.cinema]) {
             return;
         }
 
         const key = `${cinemas[show.cinema].city}_${show.film}`;
         const key2 = `${show.cinema}_${show.film}`;
+        const key3 = `${cinemas[show.cinema].city}_${show.film}_${show.cinema}`;
 
         if (!cityFilmMap[key]) {
             cities[cinemas[show.cinema].city].films.push(films[show.film]);
+
+            filmsWithShows[key] = JSON.parse(JSON.stringify(films[show.film])); // clone instance;
+            filmsWithShows[key].cinemas = [];
+            filmsWithShows[key].shows = [];
+
             cityFilmMap[key] = true;
         }
 
@@ -125,7 +140,13 @@ function init () {
             cinemaFilmMap[key2] = true;
         }
 
+        if (!cityFilmCinemaMap[key3]) {
+            filmsWithShows[key].cinemas.push(cinemasWithoutShows[show.cinema]);
+            cityFilmCinemaMap[key3] = true;
+        }
+
         cinemas[show.cinema].shows.push(show);
+        filmsWithShows[key].shows.push(show);
     });
 }
 
