@@ -36,6 +36,16 @@ app.use('/cinemas', (req, res, next) => {
     }
 });
 
+app.use('/cinema', (req, res, next) => {
+    const cinemaId = parseInt(req.originalUrl.replace('/cinema/', ''), 10);
+
+    if (cinemas[cinemaId]) {
+        sendResponse(cinemas[cinemaId], res);
+    } else {
+        notFound(`Can't find cinema ${cinemaId}`, res);
+    }
+});
+
 app.use('/films', (req, res, next) => {
     const cityId = parseInt(req.originalUrl.replace('/films/', ''), 10);
 
@@ -58,15 +68,6 @@ app.use('/film/', (req, res, next) => {
     }
 });
 
-app.use('/show/', (req, res, next) => {
-    const filmId = parseInt(req.originalUrl.replace(/^\/show\/([0-9]+)\/.*$/, '$1'), 10);
-    const cinemaId = parseInt(req.originalUrl.replace(/^\/show\/([0-9]+)\/(.*)$/, '$2'), 10);
-
-    sendResponse(data.shows.filter(function(show) {
-        return show.film === filmId && show.cinema === cinemaId;
-    }), res);
-});
-
 app.use(serveStatic(__dirname + '/../www/'));
 
 app.use('/', (req, res, next) => {
@@ -87,6 +88,7 @@ console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
 function init () {
     let cityFilmMap = {};
+    let cinemaFilmMap = {};
 
     data.cities.forEach(city => {
         cities[city.id] = JSON.parse(JSON.stringify(city)); // clone instance
@@ -99,7 +101,9 @@ function init () {
     });
 
     data.cinemas.forEach(cinema => {
-        cinemas[cinema.id] = cinema;
+        cinemas[cinema.id] = JSON.parse(JSON.stringify(cinema)); // clone instance;
+        cinemas[cinema.id].films = [];
+        cinemas[cinema.id].shows = [];
         cities[cinema.city].cinemas.push(cinema);
     });
 
@@ -109,11 +113,19 @@ function init () {
         }
 
         const key = `${cinemas[show.cinema].city}_${show.film}`;
+        const key2 = `${show.cinema}_${show.film}`;
 
         if (!cityFilmMap[key]) {
             cities[cinemas[show.cinema].city].films.push(films[show.film]);
             cityFilmMap[key] = true;
         }
+
+        if (!cinemaFilmMap[key2]) {
+            cinemas[show.cinema].films.push(films[show.film]);
+            cinemaFilmMap[key2] = true;
+        }
+
+        cinemas[show.cinema].shows.push(show);
     });
 }
 
