@@ -29,7 +29,7 @@ app.use('/cities', (req, res, next) => {
 });
 
 app.use('/cinemas', (req, res, next) => {
-    const cityId = parseInt(req.originalUrl.replace('/cinemas/', ''), 10);
+    const cityId = getIntUrlElem(req, '/cinemas/');
 
     if (req.originalUrl === '/cinemas') {
         sendResponse(data.cinemas, res);
@@ -41,7 +41,7 @@ app.use('/cinemas', (req, res, next) => {
 });
 
 app.use('/cinema', (req, res, next) => {
-    const cinemaId = parseInt(req.originalUrl.replace('/cinema/', ''), 10);
+    const cinemaId = getIntUrlElem(req, '/cinema/');
 
     if (cinemas[cinemaId]) {
         sendResponse(cinemas[cinemaId], res);
@@ -51,7 +51,7 @@ app.use('/cinema', (req, res, next) => {
 });
 
 app.use('/films', (req, res, next) => {
-    const cityId = parseInt(req.originalUrl.replace('/films/', ''), 10);
+    const cityId = getIntUrlElem(req, '/films/');
 
     if (req.originalUrl === '/films') {
         sendResponse(data.films, res);
@@ -63,7 +63,7 @@ app.use('/films', (req, res, next) => {
 });
 
 app.use('/film/', (req, res, next) => {
-    const filmId = parseInt(req.originalUrl.replace('/film/', ''), 10);
+    const filmId = getIntUrlElem(req, '/film/');
     const cityId = parseInt(req.query.showsFor, 10);
 
     if (filmsWithShows[`${cityId}_${filmId}`]) {
@@ -75,7 +75,7 @@ app.use('/film/', (req, res, next) => {
     }
 });
 
-app.use(serveStatic(__dirname + '/../www/'));
+app.use(serveStatic(__dirname + '/../www/')); // eslint-disable-line no-path-concat
 
 app.use('/', (req, res, next) => {
     if (req.originalUrl === '/') {
@@ -93,13 +93,13 @@ http.createServer(app).listen(process.env.PORT || 3000);
 
 console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
-function init () {
+function init() {
     let cityFilmMap = {};
     let cityFilmCinemaMap = {};
     let cinemaFilmMap = {};
 
     data.cities.forEach(city => {
-        cities[city.id] = JSON.parse(JSON.stringify(city)); // clone instance
+        cities[city.id] = cloneInstance(city);
         cities[city.id].cinemas = [];
         cities[city.id].films = [];
     });
@@ -109,8 +109,8 @@ function init () {
     });
 
     data.cinemas.forEach(cinema => {
-        cinemasWithoutShows[cinema.id] = JSON.parse(JSON.stringify(cinema)); // clone instance;
-        cinemas[cinema.id] = JSON.parse(JSON.stringify(cinema)); // clone instance;
+        cinemasWithoutShows[cinema.id] = cloneInstance(cinema);
+        cinemas[cinema.id] = cloneInstance(cinema);
         cinemas[cinema.id].films = [];
         cinemas[cinema.id].shows = [];
         cities[cinema.city].cinemas.push(cinema);
@@ -128,7 +128,7 @@ function init () {
         if (!cityFilmMap[key]) {
             cities[cinemas[show.cinema].city].films.push(films[show.film]);
 
-            filmsWithShows[key] = JSON.parse(JSON.stringify(films[show.film])); // clone instance;
+            filmsWithShows[key] = cloneInstance(films[show.film]);
             filmsWithShows[key].cinemas = [];
             filmsWithShows[key].shows = [];
 
@@ -180,4 +180,12 @@ function notFound(message, res) {
             statusCode: 404
         }
     }));
+}
+
+function cloneInstance(instance) {
+    return JSON.parse(JSON.stringify(instance));
+}
+
+function getIntUrlElem(req, url) {
+    return parseInt(req.originalUrl.replace(req, url, ''), 10);
 }
