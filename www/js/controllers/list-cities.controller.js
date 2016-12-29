@@ -12,7 +12,7 @@ angular.module('afisha').controller('ListCitiesController',
             serverService.fetchCities((err, cities) => {
                 $scope.cities = cities;
                 $scope.city = $scope.cities.filter(city => city.id === $scope.currentCity.id)[0] || {};
-                $scope.cities = $scope.cities.filter(city => city.id !== $scope.currentCity.id)
+                $scope.cities = $scope.cities.filter(city => city.id !== $scope.currentCity.id);
             });
         };
 
