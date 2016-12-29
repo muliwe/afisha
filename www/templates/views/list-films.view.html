@@ -1,4 +1,4 @@
-<ion-view class="background" ng-init="" cache-view="false">
+<ion-view class="background" ng-init="getFilmsList(currentCity)" cache-view="false">
     <ion-nav-bar class="bar-transparent bar">
         <ion-nav-buttons side="right">
             <button class="button button-icon ion-navicon-round light button--toggle-sidemenu" menu-toggle="right"></button>
@@ -9,16 +9,24 @@
     </ion-nav-bar>
 
     <ion-content class="films-list">
-        <ion-refresher
+        <!--ion-refresher
           class="cargo-list__refresher"
           pulling-text="Pull to refresh"
           spinner = "none"
           on-refresh="refreshList()">
-        </ion-refresher>
+        </ion-refresher-->
 
-	  <ion-list can-swipe="false">
+        <div class="button-bar" ng-show="currentCity" ng-click="toggleCity()">
+            Фильмы в городе {{currentCity.title}} &larrhk;
+        </div>
+
+        <div class="button-bar" ng-hide="currentCity" ng-click="toggleCity()">
+            Все фильмы в прокате &rarrhk;
+        </div>
+
+        <ion-list can-swipe="false">
                 <film-cell film="film" ng-repeat="film in films"></film-cell>
-      </ion-list>
+        </ion-list>
 
     </ion-content>
 
