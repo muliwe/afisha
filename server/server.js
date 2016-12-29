@@ -54,7 +54,7 @@ app.use('/films', (req, res, next) => {
     const cityId = getIntUrlElem(req, '/films/');
 
     if (req.originalUrl === '/films') {
-        sendResponse(data.films, res);
+        sendResponse(data.films.filter(film => film.shows > 0), res);
     } else if (cities[cityId]) {
         sendResponse(cities[cityId].films, res);
     } else {
