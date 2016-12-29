@@ -187,5 +187,5 @@ function cloneInstance(instance) {
 }
 
 function getIntUrlElem(req, url) {
-    return parseInt(req.originalUrl.replace(req, url, ''), 10);
+    return parseInt(req.originalUrl.replace(url, ''), 10);
 }
