@@ -13,20 +13,17 @@ angular.module('afisha').service('serverService', function($http, common) {
             url: `${common.serverUrl}/cities`,
             cache: true,
             responseType: 'json'
-        }).then(function successCallback(response) {
-            if (!response.data.originalUrl) {
+        }).then(function(response) {
+            successCallback(response, function(response) {
                 common.cache.cities = response.data.sort(function(a, b){
                     if(a.title < b.title) return -1;
                     if(a.title > b.title) return 1;
                     return 0;
                 });
-                cb(null, common.cache.cities);
-            } else {
-                cb('Wrong url', []);
-            }
-        }, function errorCallback(response) {
-            cb(response.data || 'Request failed', []);
-        });
+
+                return common.cache.cities;
+            }, cb);
+        }, errorCallback);
     };
 
     self.fetchCinemas = (cb) => {
@@ -39,20 +36,17 @@ angular.module('afisha').service('serverService', function($http, common) {
             url: `${common.serverUrl}/cinemas`,
             cache: true,
             responseType: 'json'
-        }).then(function successCallback(response) {
-            if (!response.data.originalUrl) {
+        }).then(function(response) {
+            successCallback(response, function(response) {
                 common.cache.cinemas = response.data.sort((a, b) => {
                     if(a.title < b.title) return -1;
                     if(a.title > b.title) return 1;
                     return 0;
                 });
-                cb(null, common.cache.cinemas);
-            } else {
-                cb('Wrong url', []);
-            }
-        }, function errorCallback(response) {
-            cb(response.data || 'Request failed', []);
-        });
+
+                return common.cache.cinemas;
+            }, cb);
+        }, errorCallback);
     };
 
     self.fetchFilms = (city, cb) => {
@@ -61,20 +55,15 @@ angular.module('afisha').service('serverService', function($http, common) {
             url: `${common.serverUrl}/films${city ? '/' + city.id : ''}`,
             cache: true,
             responseType: 'json'
-        }).then(function successCallback(response) {
-            if (!response.data.originalUrl) {
-                var films = response.data.sort((a, b) => {
+        }).then(function(response) {
+            successCallback(response, function(response) {
+                return response.data.sort((a, b) => {
                     if(a.shows < b.shows) return 1;
                     if(a.shows > b.shows) return -1;
                     return 0;
                 });
-                cb(null, films);
-            } else {
-                cb('Wrong url', []);
-            }
-        }, function errorCallback(response) {
-            cb(response.data || 'Request failed', []);
-        });
+            }, cb);
+        }, errorCallback);
     };
 
     self.fetchCity = (cityId, cb) => {
@@ -95,3 +84,15 @@ angular.module('afisha').service('serverService', function($http, common) {
         });
     };
 });
+
+function successCallback(response, exec, cb) {
+    if (!response.data.originalUrl) {
+        cb(null, exec(response));
+    } else {
+        cb('Wrong url', {});
+    }
+}
+
+function errorCallback(response, cb) {
+    cb(response.data || 'Request failed', {});
+}
