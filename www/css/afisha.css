@@ -116,11 +116,13 @@ img.img-vert2 {
 }
 
 .well .more  {
-    color: #666;
+    color: #444;
+    font-weight: 600;
 }
 
 .well .off {
     color: #CCC;
+    font-weight: normal;
 }
 
 .higher  div{
