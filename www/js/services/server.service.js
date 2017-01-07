@@ -66,6 +66,19 @@ angular.module('afisha').service('serverService', function($http, common) {
         }, errorCallback);
     };
 
+    self.fetchFilm = (filmId, cityId, cb) => {
+        $http({
+            method: 'GET',
+            url: `${common.serverUrl}/film${filmId ? '/' + filmId : ''}${cityId ? '?showFor=' + cityId : ''}`,
+            cache: true,
+            responseType: 'json'
+        }).then(function(response) {
+            successCallback(response, function(response) {
+                return response.data;
+            }, cb);
+        }, errorCallback);
+    };
+
     self.fetchCity = (cityId, cb) => {
         self.fetchCities((err, cities) => {
             self.fetchCinemas((err, cinemas) => {
