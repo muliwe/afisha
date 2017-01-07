@@ -23,7 +23,7 @@ angular.module('afisha').service('serverService', function($http, common) {
 
                 return common.cache.cities;
             }, cb);
-        }, errorCallback);
+        }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchCinemas = (cb) => {
@@ -46,7 +46,7 @@ angular.module('afisha').service('serverService', function($http, common) {
 
                 return common.cache.cinemas;
             }, cb);
-        }, errorCallback);
+        }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchFilms = (city, cb) => {
@@ -63,20 +63,20 @@ angular.module('afisha').service('serverService', function($http, common) {
                     return 0;
                 });
             }, cb);
-        }, errorCallback);
+        }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchFilm = (filmId, cityId, cb) => {
         $http({
             method: 'GET',
-            url: `${common.serverUrl}/film${filmId ? '/' + filmId : ''}${cityId ? '?showFor=' + cityId : ''}`,
+            url: `${common.serverUrl}/film${filmId ? '/' + filmId : ''}${cityId ? '?showsFor=' + cityId : ''}`,
             cache: true,
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
                 return response.data;
             }, cb);
-        }, errorCallback);
+        }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchCity = (cityId, cb) => {
