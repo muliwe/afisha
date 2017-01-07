@@ -12,7 +12,7 @@ angular.module('afisha').controller('FilmController',
 
         $scope.getFilm = function() {
             $scope.film = {};
-            serverService.fetchFilm($scope.filmId, $scope.cityId, (err, film) => {
+            serverService.fetchFilm($scope.filmId, $scope.city.id, (err, film) => {
                 (film && film.shows || []).forEach(show => {
                     show.timeParsed = show.date;
                     show.timeParsed = show.timeParsed.replace(':', '');
