@@ -12,13 +12,13 @@ angular.module('afisha').controller('FilmController',
         $scope.getFilm = function() {
             $scope.film = {};
             serverService.fetchFilm($scope.filmId, $scope.cityId, (err, film) => {
-                $scope.film = film;
+                $scope.film = film || {};
                 $scope.refreshDate($scope.date);
             });
         };
 
         $scope.refreshDate = function(date) {
-            $scope.cinemas = $scope.film.cinemas;
+            $scope.cinemas = $scope.film && $scope.film.cinemas;
         };
 
         $scope.openFilm = function() {

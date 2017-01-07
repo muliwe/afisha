@@ -82,8 +82,8 @@ angular.module('afisha').service('serverService', function($http, common) {
     self.fetchCity = (cityId, cb) => {
         self.fetchCities((err, cities) => {
             self.fetchCinemas((err, cinemas) => {
-                cb(cities.filter(city => city.id === cityId)[0] || {},
-                    cinemas.filter(cinema => cinema.city === cityId))
+                cb((cities || []).filter(city => city.id === cityId)[0] || {},
+                    (cinemas || []).filter(cinema => cinema.city === cityId))
             });
         });
     };
@@ -91,8 +91,8 @@ angular.module('afisha').service('serverService', function($http, common) {
     self.fetchCinema = (cinemaId, cb) => {
         self.fetchCities((err, cities) => {
             self.fetchCinemas((err, cinemas) => {
-                let cinema = cinemas.filter(cinema => cinema.id === cinemaId)[0] || {};
-                cb(cinema, cities.filter(city => city.id === cinema.city)[0] || {});
+                let cinema = (cinemas || []).filter(cinema => cinema.id === cinemaId)[0] || {};
+                cb(cinema, (cities || []).filter(city => city.id === cinema.city)[0] || {});
             });
         });
     };
@@ -102,10 +102,10 @@ function successCallback(response, exec, cb) {
     if (!response.data.originalUrl) {
         cb(null, exec(response));
     } else {
-        cb('Wrong url', {});
+        cb('Wrong url', null);
     }
 }
 
 function errorCallback(response, cb) {
-    cb(response.data || 'Request failed', {});
+    cb(response.data || 'Request failed', null);
 }

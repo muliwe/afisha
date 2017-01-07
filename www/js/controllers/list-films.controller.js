@@ -10,7 +10,7 @@ angular.module('afisha').controller('ListFilmsController',
         $scope.getCitiesList = function(city) {
             $scope.films = [];
             serverService.fetchFilms(city, (err, films) => {
-                $scope.films = films;
+                $scope.films = films || [];
             });
         };
 
