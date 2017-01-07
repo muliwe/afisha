@@ -10,7 +10,7 @@
         <div ng-hide="noSchedule">
 
             <div class="col-xs-4 higher" ng-show="film && film.poster" ng-click="openFilm(film)">
-                <img class="img-vert2" src="{{film.poster}}" alt="{{film.title}}">
+                <img class="img-vert2" ng-src="{{film.poster}}" alt="{{film.title}}">
             </div>
             <div class="col-xs-8 higher clear" ng-show="film" ng-click="openFilm(film)">
                 <h4>{{film.title}}</h4>

@@ -2,7 +2,7 @@
     <div class="well">
         <h2 ng-if="full">{{film.title}}</h2>
 
-        <img ng-if="film && film.poster" class="img-vert" src="{{film.poster}}" alt="{{film.title}}">
+        <img ng-if="film && film.poster" class="img-vert" ng-src="{{film.poster}}" alt="{{film.title}}">
 
         <div class="media-right">
 
@@ -10,7 +10,7 @@
 
             <div><b>{{film.age || 0}}+</b></div>
 
-            <div><i>Комиксы / фэнтэзи</i></div>
+            <!--div><i>Комиксы / фэнтэзи</i></div-->
 
             <div ng-if="film.shows > 5000"><b>Широкий прокат</b></div>
 
