@@ -26,6 +26,7 @@
             <cinema-schedule-cell cinema="cinema" one-film="true"
                        ng-repeat="cinema in cinemas">
             </cinema-schedule-cell>
+            <div ng-hide="cinema.length">Расписание на этот день не найдено</div>
         </ion-list>
 
     </ion-content>
