@@ -8,14 +8,15 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common',
        scope: {
            cinema: '=',
            film: '=',
-           date: '='
+           date: '=',
+           onChange: '&'
        },
        link: function (scope, element, attr) {
            scope.dates = [];
            scope.date = common.currentDate;
 
            let date = scope.date.getDate() > new Date().getDate()? new Date() : new Date(scope.date);
-           let more = false;
+
            for (let i = 0; i < 7; i++) {
                scope.dates.push(new Date(date));
                date.setDate(date.getDate() + 1);
@@ -25,6 +26,7 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common',
                if (date) {
                    common.currentDate = date;
                    scope.date = common.currentDate;
+                   scope.onChange(date);
                }
            };
        }

@@ -20,7 +20,7 @@
 
         <h3>Расписание сеансов</h3>
 
-        <calendar-nav film="film" date="date"></calendar-nav>
+        <calendar-nav film="film" date="date" on-change="refreshDate"></calendar-nav>
 
         <ion-list can-swipe="false">
             <cinema-schedule-cell cinema="cinema" one-film="true"
