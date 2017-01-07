@@ -15,7 +15,8 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common',
            scope.dates = [];
            scope.date = common.currentDate;
 
-           let date = scope.date.getDate() > new Date().getDate()? new Date() : new Date(scope.date);
+           let date = scope.date.getDate() > new Date('2016-11-05').getDate()?
+               new Date('2016-11-05') : new Date(scope.date);
 
            for (let i = 0; i < 7; i++) {
                scope.dates.push(new Date(date));
