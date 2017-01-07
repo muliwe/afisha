@@ -16,8 +16,8 @@ angular.module('afisha').service('serverService', function($http, common) {
         }).then(function(response) {
             successCallback(response, function(response) {
                 common.cache.cities = response.data.sort(function(a, b){
-                    if(a.title < b.title) return -1;
-                    if(a.title > b.title) return 1;
+                    if (a.title < b.title) return -1;
+                    if (a.title > b.title) return 1;
                     return 0;
                 });
 
@@ -39,8 +39,8 @@ angular.module('afisha').service('serverService', function($http, common) {
         }).then(function(response) {
             successCallback(response, function(response) {
                 common.cache.cinemas = response.data.sort((a, b) => {
-                    if(a.title < b.title) return -1;
-                    if(a.title > b.title) return 1;
+                    if (a.title < b.title) return -1;
+                    if (a.title > b.title) return 1;
                     return 0;
                 });
 
@@ -58,8 +58,8 @@ angular.module('afisha').service('serverService', function($http, common) {
         }).then(function(response) {
             successCallback(response, function(response) {
                 return response.data.sort((a, b) => {
-                    if(a.shows < b.shows) return 1;
-                    if(a.shows > b.shows) return -1;
+                    if (a.shows < b.shows) return 1;
+                    if (a.shows > b.shows) return -1;
                     return 0;
                 });
             }, cb);
