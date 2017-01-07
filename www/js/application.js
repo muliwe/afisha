@@ -212,7 +212,7 @@ const ApplicationConfiguration = (function(){
             }
 
             serverService.fetchCities((err, cities) => {
-                console.log(err, cities);
+                // console.log(err, cities);
             });
         });
 
