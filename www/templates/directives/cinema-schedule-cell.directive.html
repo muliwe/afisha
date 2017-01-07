@@ -19,8 +19,8 @@
             </div>
             <br clear="all" />
 
-            <div class="col-xs-9 higher" ng-show="oneFilm">
-                <div class="col-xs-4 col-sm-2" ng-repeat="show in cinema.shows">{{show.date}}</div>
+            <div class="col-xs-12 higher" ng-show="oneFilm">
+                <div class="col-xs-2 col-sm-1" ng-repeat="show in cinema.shows" ng-class="show.timeClass">{{show.time}}</div>
             </div>
 
             <!--div class="col-xs-3">

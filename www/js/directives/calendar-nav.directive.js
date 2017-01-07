@@ -9,27 +9,31 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common',
            cinema: '=',
            film: '=',
            date: '=',
-           onChange: '&'
+           change: '='
        },
        link: function (scope, element, attr) {
            scope.dates = [];
            scope.date = common.currentDate;
 
-           let date = scope.date.getDate() > new Date('2016-11-05').getDate()?
-               new Date('2016-11-05') : new Date(scope.date);
+           // @todo remove hardcoded date
+           let date = scope.date.getDate() > new Date('2016-11-03').getDate()?
+               new Date('2016-11-03') : new Date(scope.date);
+
+           scope.changeDate = function (newDate) {
+               if (newDate) {
+                   common.currentDate = newDate;
+                   scope.date = common.currentDate;
+                   scope.change(newDate);
+               }
+           };
+
+           // @todo remove hardcoded date
+           scope.changeDate(scope.date > new Date('2016-11-09') ? date : scope.date);
 
            for (let i = 0; i < 7; i++) {
                scope.dates.push(new Date(date));
                date.setDate(date.getDate() + 1);
            }
-
-           scope.changeDate = function (date) {
-               if (date) {
-                   common.currentDate = date;
-                   scope.date = common.currentDate;
-                   scope.onChange(date);
-               }
-           };
        }
    };
 }]);

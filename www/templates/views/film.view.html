@@ -20,13 +20,13 @@
 
         <h3>Расписание сеансов</h3>
 
-        <calendar-nav film="film" date="date" on-change="refreshDate"></calendar-nav>
+        <calendar-nav film="film" date="date" change="refreshDate"></calendar-nav>
 
         <ion-list can-swipe="false">
             <cinema-schedule-cell cinema="cinema" one-film="true"
                        ng-repeat="cinema in cinemas">
             </cinema-schedule-cell>
-            <div ng-hide="cinema.length">Расписание на этот день не найдено</div>
+            <div ng-hide="cinemas.length">Расписание на этот день не найдено</div>
         </ion-list>
 
     </ion-content>
