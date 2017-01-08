@@ -1,34 +1,87 @@
 'use strict';
 
 angular.module('afisha').controller('CinemaController',
-    ['$scope', '$state', '$stateParams', 'common', 'localStorageService', 'serverService',
-    function($scope, $state, $stateParams, common, localStorageService, serverService) {
-        $scope.films = [
-            {"id":1,"title":"Доктор Стрэндж","age":"16","shows":58274,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/28/160928110516678.jpg", "anons": "Главная героиня общается с инопланетянами и вспоминает погибшую дочь"},
-            {"id":2,"title":"Инферно","age":"16","shows":5843,"poster":"http://s2.kassa.rl0.ru/StaticContent/P/Img/1610/11/161011103842547.jpg", "anons": "Профессор Лэнгдон снова спасает мир"},
-            {"id":3,"title":"Расплата","age":"18","shows":17005,"poster":"http://s2.kassa.rl0.ru/StaticContent/P/Img/1610/20/161020175830989.jpg", "anons": "Аутический триллер про криминального бухгалтера"},
-            {"id":4,"title":"Джек Ричер 2: Никогда не возвращайся","age":"16","shows":4139,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1610/04/161004151752356.jpg", "anons": "Проходной боевик с Крузом"},
-            {"id":5,"title":"Ледокол","age":"12","shows":19312,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1610/04/161004152034277.jpg", "anons": "Советские моряки против айсберга"},
-            {"id":6,"title":"Дуэлянт","age":"16","shows":1600,"poster":"http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/08/160908104500630.jpg", "anons": "Сложносочинённая роосийская костюмная дама о проклятии в позапрошлом веке"}
-        ];
-
+    ['$scope', '$state', '$stateParams', 'common', 'localStorageService', 'serverService', 'helperService',
+    function($scope, $state, $stateParams, common, localStorageService, serverService, helperService) {
         $scope.cinema = {};
         $scope.city = {};
+        $scope.films = [];
+        $scope.filmsHash = {};
+
         $scope.cinemaId = +$stateParams.cinemaId;
-
-        $scope.getCinema = function(){
-            serverService.fetchCinema($scope.cinemaId, (cinema, city) => {
-                $scope.cinema = cinema;
-                $scope.city = city;
-                canRecount();
-            });
-        };
-
         $scope.date = common.currentDate;
-
         $scope.currentCity = common.currentCity;
 
         canRecount();
+
+        $scope.refreshDate = function(date) {
+            const dateString = new Date(date).toISOString().replace(/T.*$/, '');
+            let haveFilm = {};
+            let films = [];
+
+            $scope.films = [];
+            $scope.filmsHash = {};
+
+            ($scope.cinema.films || []).forEach(film => {
+                $scope.filmsHash[film.id] = film;
+                $scope.filmsHash[film.id].halls = [];
+                $scope.filmsHash[film.id].shows = [];
+            });
+
+            // console.log(dateString);
+
+            ($scope.cinema.shows || []).forEach(show => {
+                if (show.date === dateString) {
+                    if (!haveFilm[show.film]) {
+                        haveFilm[show.film] = true;
+                        films.push($scope.filmsHash[show.film]);
+                    }
+                    $scope.filmsHash[show.films].shows.push(show);
+                }
+            });
+
+            films = films.sort(helperService.sortByShows);
+
+            films.forEach(films => {
+                let haveHall = {};
+                let halls = [];
+                let hallHash = {};
+
+                films.shows.forEach(show => {
+                    const key = show.hall + show.format;
+                    if (!haveHall[key]) {
+                        haveHall[key] = true;
+                        hallHash[key] = {
+                            title: show.hall,
+                            format: show.format,
+                            shows: []
+                        };
+                        halls.push(hallHash[key]);
+                    }
+                    hallHash[key].shows.push(show);
+                });
+
+                delete film.shows;
+                film.halls = halls.sort(helperService.sortByTitle);
+            });
+
+
+            $scope.films = films;
+        };
+
+        $scope.getCinema = function() {
+            serverService.fetchCinema($scope.cinemaId, (err, cinema) => {
+                if (cinema) {
+                    (cinema.shows || []).forEach(helperService.showConfigure);
+
+                    $scope.cinema = cinema;
+                    $scope.city = cinema.city;
+                }
+
+                $scope.refreshDate($scope.date);
+                canRecount();
+            });
+        };
 
         $scope.saveCinema = function () {
             common.savedCinemas.push($scope.cinema);

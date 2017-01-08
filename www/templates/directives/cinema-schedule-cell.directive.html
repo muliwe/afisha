@@ -19,35 +19,16 @@
             </div>
             <br clear="all" />
 
-            <div class="col-xs-12 higher" ng-show="oneFilm">
+            <div class="col-xs-12 higher" ng-if="oneFilm">
                 <div class="col-xs-2 col-sm-1" ng-repeat="show in cinema.shows" ng-class="show.timeClass">{{show.time}}</div>
             </div>
 
-            <!--div class="col-xs-3">
-                Зал 1 <b>IMAX</b>
+            <div ng-if="film.halls" ng-repeat="hall in film.halls">
+                <div class="col-xs-3">
+                    {{hall.title}} <b>{{hall.format}}</b>
+                </div>
+                <div class="col-xs-4 col-sm-2" ng-repeat="show in hall.shows" ng-class="show.timeClass">{{show.time}}</div>
             </div>
-            <div class="col-xs-9 higher">
-                <div class="col-xs-4 col-sm-2 less off">11:05</div>
-                <div class="col-xs-4 col-sm-2 less">13:35</div>
-                <div class="col-xs-4 col-sm-2 ">16:15</div>
-                <div class="col-xs-4 col-sm-2 ">18:50</div>
-                <div class="col-xs-4 col-sm-2 more">20:25</div>
-                <div class="col-xs-4 col-sm-2 more">22:15</div>
-                <div class="col-xs-4 col-sm-2 ">23:35</div>
-            </div>
-            <div class="col-xs-3">
-                Зал 2
-            </div>
-            <div class="col-xs-9 higher">
-                <div class="col-xs-4 col-sm-2 less off">10:00</div>
-                <div class="col-xs-4 col-sm-2 less">12:15</div>
-                <div class="col-xs-4 col-sm-2 ">14:30</div>
-                <div class="col-xs-4 col-sm-2 ">16:45</div>
-                <div class="col-xs-4 col-sm-2 more">19:15</div>
-                <div class="col-xs-4 col-sm-2 more">21:15</div>
-                <div class="col-xs-4 col-sm-2 ">23:30</div>
-            </div-->
-
         </div>
     </div>
 </ion-item>

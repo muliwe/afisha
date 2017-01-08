@@ -41,6 +41,7 @@
             <cinema-schedule-cell film="film"
                                   ng-repeat="film in films">
             </cinema-schedule-cell>
+            <div ng-hide="films.length">Расписание на этот день не найдено</div>
         </ion-list>
 
     </ion-content>
