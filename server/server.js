@@ -113,7 +113,7 @@ function init() {
         cinemas[cinema.id] = cloneInstance(cinema);
         cinemas[cinema.id].films = [];
         cinemas[cinema.id].shows = [];
-        cinemas[cinema.id].city = cities[cinema.city];
+        cinemas[cinema.id].aCity = cities[cinema.city];
         cities[cinema.city].cinemas.push(cinema);
     });
 

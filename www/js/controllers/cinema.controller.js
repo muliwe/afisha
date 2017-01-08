@@ -75,7 +75,7 @@ angular.module('afisha').controller('CinemaController',
                     (cinema.shows || []).forEach(helperService.showConfigure);
 
                     $scope.cinema = cinema;
-                    $scope.city = cinema.city;
+                    $scope.city = cinema.aCity;
                 }
 
                 $scope.refreshDate($scope.date);
