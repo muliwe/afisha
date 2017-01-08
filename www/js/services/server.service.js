@@ -77,12 +77,16 @@ angular.module('afisha').service('serverService', function($http, common, helper
     };
 
     self.fetchCinema = (cinemaId, cb) => {
-        self.fetchCities((err, cities) => {
-            self.fetchCinemas((err, cinemas) => {
-                let cinema = (cinemas || []).filter(cinema => cinema.id === cinemaId)[0] || {};
-                cb(cinema, (cities || []).filter(city => city.id === cinema.city)[0] || {});
-            });
-        });
+        $http({
+            method: 'GET',
+            url: `${common.serverUrl}/cinemas/${cinemaId}`,
+            cache: true,
+            responseType: 'json'
+        }).then(function(response) {
+            successCallback(response, function(response) {
+                return response.data;
+            }, cb);
+        }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 });
 
