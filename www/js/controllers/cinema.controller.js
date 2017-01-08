@@ -36,18 +36,18 @@ angular.module('afisha').controller('CinemaController',
                         haveFilm[show.film] = true;
                         films.push($scope.filmsHash[show.film]);
                     }
-                    $scope.filmsHash[show.films].shows.push(show);
+                    $scope.filmsHash[show.film].shows.push(show);
                 }
             });
 
             films = films.sort(helperService.sortByShows);
 
-            films.forEach(films => {
+            films.forEach(film => {
                 let haveHall = {};
                 let halls = [];
                 let hallHash = {};
 
-                films.shows.forEach(show => {
+                film.shows.forEach(show => {
                     const key = show.hall + show.format;
                     if (!haveHall[key]) {
                         haveHall[key] = true;

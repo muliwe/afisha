@@ -24,10 +24,15 @@
             </div>
 
             <div ng-if="film.halls" ng-repeat="hall in film.halls">
-                <div class="col-xs-3">
-                    {{hall.title}} <b>{{hall.format}}</b>
+                <div class="col-xs-12 higher">
+                    <b>{{hall.title}}</b>
                 </div>
-                <div class="col-xs-4 col-sm-2" ng-repeat="show in hall.shows" ng-class="show.timeClass">{{show.time}}</div>
+                <div ng-if="hall.format" class="col-xs-12 higher">
+                    {{hall.format}}
+                </div>
+                <div class="col-xs-12 higher">
+                    <div class="col-xs-2 col-sm-1" ng-repeat="show in hall.shows" ng-class="show.timeClass">{{show.time}}</div>
+                </div>
             </div>
         </div>
     </div>
