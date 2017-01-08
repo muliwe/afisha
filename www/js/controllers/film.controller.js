@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afisha').controller('FilmController',
-    ['$scope', '$state', '$stateParams', 'common', 'serverService',
-    function($scope, $state, $stateParams, common, serverService) {
+    ['$scope', '$state', '$stateParams', 'common', 'serverService', 'helperService',
+    function($scope, $state, $stateParams, common, serverService, helperService) {
         $scope.film = {};
         $scope.filmId = +$stateParams.filmId;
         $scope.city = common.currentCity;
@@ -13,14 +13,7 @@ angular.module('afisha').controller('FilmController',
         $scope.getFilm = function() {
             $scope.film = {};
             serverService.fetchFilm($scope.filmId, $scope.city.id, (err, film) => {
-                (film && film.shows || []).forEach(show => {
-                    show.timeParsed = show.time;
-                    show.timeParsed = show.timeParsed.replace(':', '');
-                    show.timeParsed = parseInt(show.timeParsed, 10);
-                    show.timeParsed = show.timeParsed > 600 ? show.timeParsed : show.timeParsed + 2400;
-                    show.timeClass = show.timeParsed > 1850 && show.timeParsed < 2300 ? 'more' : (
-                        show.timeParsed < 1400 ? 'less' : '');
-                });
+                (film && film.shows || []).forEach(helperService.showConfigure);
 
                 $scope.film = film || {};
 
@@ -53,18 +46,10 @@ angular.module('afisha').controller('FilmController',
                 }
             });
 
-            cinemas = cinemas.sort((a, b) => {
-                if (a.title < b.title) return -1;
-                if (a.title > b.title) return 1;
-                return 0;
-            });
+            cinemas = cinemas.sort(helperService.sortByTitle);
 
             cinemas.forEach(cinema => {
-                cinema.shows = cinema.shows.sort((a, b) => {
-                    if (a.timeParsed < b.timeParsed) return -1;
-                    if (a.timeParsed > b.timeParsed) return 1;
-                    return 0;
-                });
+                cinema.shows = cinema.shows.sort(helperService.sortByTime);
             });
 
             $scope.cinemas = cinemas;

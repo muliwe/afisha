@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('afisha').service('serverService', function($http, common) {
+angular.module('afisha').service('serverService', function($http, common, helperService) {
     let self = this;
 
     self.fetchCities = (cb) => {
@@ -15,11 +15,7 @@ angular.module('afisha').service('serverService', function($http, common) {
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                common.cache.cities = response.data.sort(function(a, b){
-                    if (a.title < b.title) return -1;
-                    if (a.title > b.title) return 1;
-                    return 0;
-                });
+                common.cache.cities = response.data.sort(helperService.sortByTitle);
 
                 return common.cache.cities;
             }, cb);
@@ -38,11 +34,7 @@ angular.module('afisha').service('serverService', function($http, common) {
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                common.cache.cinemas = response.data.sort((a, b) => {
-                    if (a.title < b.title) return -1;
-                    if (a.title > b.title) return 1;
-                    return 0;
-                });
+                common.cache.cinemas = response.data.sort(helperService.sortByTitle);
 
                 return common.cache.cinemas;
             }, cb);
@@ -57,11 +49,7 @@ angular.module('afisha').service('serverService', function($http, common) {
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                return response.data.sort((a, b) => {
-                    if (a.shows < b.shows) return 1;
-                    if (a.shows > b.shows) return -1;
-                    return 0;
-                });
+                return response.data.sort(helperService.sortByShows);
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
