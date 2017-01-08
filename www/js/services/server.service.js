@@ -34,7 +34,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                common.cache.cinemas = response.data.sort(helperService.sortByTitle);
+                common.cache.cinemas = response.data.sort(helperService.sortByShows);
 
                 return common.cache.cinemas;
             }, cb);
@@ -79,7 +79,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
     self.fetchCinema = (cinemaId, cb) => {
         $http({
             method: 'GET',
-            url: `${common.serverUrl}/cinemas/${cinemaId}`,
+            url: `${common.serverUrl}/cinema/${cinemaId}`,
             cache: true,
             responseType: 'json'
         }).then(function(response) {

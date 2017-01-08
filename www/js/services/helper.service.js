@@ -18,13 +18,13 @@ angular.module('afisha').service('helperService', function() {
         return 0;
     };
 
-    self.sotByTitle = (a, b) => {
-        if (a.timeParsed < b.timeParsed) return -1;
-        if (a.timeParsed > b.timeParsed) return 1;
+    self.sortByTitle = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
         return 0;
     };
 
-    self.sotByShows = (a, b) => {
+    self.sortByShows = (a, b) => {
         if (a.shows < b.shows) return 1;
         if (a.shows > b.shows) return -1;
         return 0;
