@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afisha').controller('ListCinemasController',
-    ['$scope', '$state', '$stateParams', 'serverService', 'localStorageService', 'common',
-    function($scope, $state, $stateParams, serverService, localStorageService, common) {
+    ['$scope', '$state', '$stateParams', 'serverService', 'localStorageService', 'common', 'helperService',
+    function($scope, $state, $stateParams, serverService, localStorageService, common, helperService) {
         $scope.cinemas = [];
         $scope.savedCinemas = [];
 
@@ -32,7 +32,7 @@ angular.module('afisha').controller('ListCinemasController',
             $scope.cinemas = [];
             $scope.savedCinemas = [];
 
-            cinemas.forEach(cinema => {
+            cinemas.sort(helperService.sortByTitle).forEach(cinema => {
                if (cinemaIds.includes(cinema.id)) {
                    $scope.savedCinemas.push(cinema);
                } else {
