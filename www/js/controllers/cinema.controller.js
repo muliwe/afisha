@@ -7,7 +7,7 @@ angular.module('afisha').controller('CinemaController',
         $scope.city = {};
         $scope.films = [];
         $scope.dataLoaded = false;
-        $scope.useHalls = true;
+        $scope.useHalls = common.useHalls;
 
         $scope.cinemaId = +$stateParams.cinemaId;
         $scope.date = common.currentDate;
@@ -105,6 +105,8 @@ angular.module('afisha').controller('CinemaController',
 
         $scope.toggleChange = () => {
             $scope.useHalls = !$scope.useHalls;
+            common.useHalls = $scope.useHalls;
+            localStorageService.set('useHalls', JSON.stringify(common.useHalls));
             $scope.refreshDate($scope.date);
         };
 

@@ -11,5 +11,6 @@ angular.module('constants').constant('common', {
         longitude: 37.6213073730469
     },
     savedCinemas: [],
+    useHalls: true,
     cache: {}
 });

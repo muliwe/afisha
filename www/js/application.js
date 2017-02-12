@@ -225,6 +225,11 @@ const ApplicationConfiguration = (function(){
                 // console.log(common.currentCity);
             }
 
+            if (localStorageService.get('useHalls')) {
+                common.useHalls = JSON.parse(localStorageService.get('useHalls'));
+                // console.log(common.useHalls);
+            }
+
             if (localStorageService.get('savedCinemas')) {
                 common.savedCinemas = JSON.parse(localStorageService.get('savedCinemas'));
                 // console.log(common.savedCinemas);
