@@ -12,11 +12,9 @@
 
             <div ng-if="film.theme"><i>{{film.theme}}</i></div>
 
-            <div ng-if="film.anons">{{film.anons}}</div>
-
             <div ng-if="film.shows > 5000"><b>Широкий прокат</b></div>
 
-            <p ng-if="full">{{film.anons}}</p>
+            <p ng-if="full && film.anons" ng-bind-html="film.anons"></p>
         </div>
     </div>
 </ion-item>

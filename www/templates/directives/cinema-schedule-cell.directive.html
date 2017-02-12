@@ -15,7 +15,7 @@
             <div class="col-xs-8 higher clear" ng-show="film" ng-click="openFilm(film)">
                 <h4>{{film.title}}</h4>
 
-                <div><b>{{film.age || 0}}+</b></div>
+                <div><b>{{film.age || 0}}+</b> {{film.theme ? '/ ' + film.theme : ''}}</div>
             </div>
             <br clear="all" />
 
