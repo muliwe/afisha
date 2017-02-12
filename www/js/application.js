@@ -71,12 +71,12 @@ const ApplicationConfiguration = (function(){
 
             const disableLoadingShowMock = $rootScope.$on('loading:show', function() {
                 retainCounter++;
-                console.log(retainCounter);
+                // console.log(retainCounter);
             });
 
             const disableLoadingHideMock = $rootScope.$on('loading:hide', function() {
                 retainCounter--;
-                console.log(retainCounter);
+                // console.log(retainCounter);
             });
 
             // Loading template prefetching.
