@@ -7,6 +7,7 @@ angular.module('afisha').controller('CinemaController',
         $scope.city = {};
         $scope.films = [];
         $scope.dataLoaded = false;
+        $scope.useHalls = true;
 
         $scope.cinemaId = +$stateParams.cinemaId;
         $scope.date = common.currentDate;
@@ -45,12 +46,14 @@ angular.module('afisha').controller('CinemaController',
                 let halls = [];
                 let hallHash = {};
 
+                const defaultHallTitle = '';
+
                 film.shows.forEach(show => {
-                    const key = show.hall + show.format;
+                    const key = ($scope.useHalls ? show.hall : 'defaultHall') + show.format;
                     if (!haveHall[key]) {
                         haveHall[key] = true;
                         hallHash[key] = {
-                            title: show.hall,
+                            title: ($scope.useHalls ? show.hall : defaultHallTitle),
                             format: show.format,
                             shows: []
                         };
@@ -98,6 +101,11 @@ angular.module('afisha').controller('CinemaController',
             $scope.currentCity = common.currentCity = $scope.city;
             localStorageService.set('currentCity', JSON.stringify($scope.city));
             canRecount();
+        };
+
+        $scope.toggleChange = () => {
+            $scope.useHalls = !$scope.useHalls;
+            $scope.refreshDate($scope.date);
         };
 
         $scope.openFilm = function (film) {

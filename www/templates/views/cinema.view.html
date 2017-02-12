@@ -37,6 +37,10 @@
             <calendar-nav cinema="cinema" date="date" change="refreshDate"></calendar-nav>
         </ion-list>
 
+        <ion-toggle ng-model="useHalls" ng-change="toggleChange()">
+            {{useHalls ? 'Показать сеансы списком' : 'Сгруппировать по залам' }}
+        </ion-toggle>
+
         <ion-list can-swipe="false" ng-if="dataLoaded">
             <cinema-schedule-cell film="film"
                                   ng-repeat="film in films">
