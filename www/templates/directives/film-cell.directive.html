@@ -10,7 +10,9 @@
 
             <div><b>{{film.age || 0}}+</b></div>
 
-            <!--div><i>Комиксы / фэнтэзи</i></div-->
+            <div ng-if="film.theme"><i>{{film.theme}}</i></div>
+
+            <div ng-if="film.anons">{{film.anons}}</div>
 
             <div ng-if="film.shows > 5000"><b>Широкий прокат</b></div>
 

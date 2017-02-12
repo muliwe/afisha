@@ -13,10 +13,13 @@ angular.module('afisha').controller('FilmController',
         $scope.getFilm = function() {
             $scope.film = {};
             serverService.fetchFilm($scope.filmId, $scope.city.id, (err, film) => {
-                (film && film.shows || []).forEach(helperService.showConfigure);
-                film.shows = (film && film.shows || []).sort(helperService.sortByTime);
+                film  = film || {};
 
-                $scope.film = film || {};
+                (film.shows || []).forEach(helperService.showConfigure);
+                film.shows = (film.shows || []).sort(helperService.sortByTime);
+                film.anons = helperService.prepareAnons(film.anons);
+
+                $scope.film = film;
 
                 $scope.refreshDate($scope.date);
                 $scope.dataLoaded = true;

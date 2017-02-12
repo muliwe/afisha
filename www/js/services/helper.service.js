@@ -29,4 +29,15 @@ angular.module('afisha').service('helperService', function() {
         if (a.shows > b.shows) return -1;
         return 0;
     };
+
+    self.prepareAnons = anons => {
+        if (!anons) {
+            return anons;
+        }
+
+        anons = '' + anons;
+        anons = anons.replace(/\n\n/g, '<br>');
+        anons = anons.replace(/<\/*a.*?>/ig, '');
+        return anons;
+    }
 });
