@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('afisha').service('serverService', function($http, common, helperService) {
+angular.module('afisha').service('serverService', function($http, common, $rootScope, helperService) {
     let self = this;
 
     self.fetchCities = (cb) => {
@@ -8,6 +8,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
             return cb(null, common.cache.cities);
         }
 
+        $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
             url: `${common.serverUrl}/cities`,
@@ -27,6 +28,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
             return cb(null, common.cache.cinemas);
         }
 
+        $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
             url: `${common.serverUrl}/cinemas`,
@@ -42,6 +44,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
     };
 
     self.fetchFilms = (city, cb) => {
+        $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
             url: `${common.serverUrl}/films${city ? '/' + city.id : ''}`,
@@ -55,6 +58,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
     };
 
     self.fetchFilm = (filmId, cityId, cb) => {
+        $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
             url: `${common.serverUrl}/film${filmId ? '/' + filmId : ''}${cityId ? '?showsFor=' + cityId : ''}`,
@@ -68,8 +72,10 @@ angular.module('afisha').service('serverService', function($http, common, helper
     };
 
     self.fetchCity = (cityId, cb) => {
+        $rootScope.$emit('loading:show');
         self.fetchCities((err, cities) => {
             self.fetchCinemas((err, cinemas) => {
+                $rootScope.$emit('loading:hide');
                 cb((cities || []).filter(city => city.id === cityId)[0] || {},
                     (cinemas || []).filter(cinema => cinema.city === cityId))
             });
@@ -77,6 +83,7 @@ angular.module('afisha').service('serverService', function($http, common, helper
     };
 
     self.fetchCinema = (cinemaId, cb) => {
+        $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
             url: `${common.serverUrl}/cinema/${cinemaId}`,
@@ -88,16 +95,18 @@ angular.module('afisha').service('serverService', function($http, common, helper
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
-});
 
-function successCallback(response, exec, cb) {
-    if (!response.data.originalUrl) {
-        cb(null, exec(response));
-    } else {
-        cb('Wrong url', null);
+    function successCallback(response, exec, cb) {
+        $rootScope.$emit('loading:hide');
+        if (!response.data.originalUrl) {
+            cb(null, exec(response));
+        } else {
+            cb('Wrong url', null);
+        }
     }
-}
 
-function errorCallback(response, cb) {
-    cb(response.data || 'Request failed', null);
-}
+    function errorCallback(response, cb) {
+        $rootScope.$emit('loading:hide');
+        cb(response.data || 'Request failed', null);
+    }
+});

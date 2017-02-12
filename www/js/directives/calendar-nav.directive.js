@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('afisha').directive('calendarNav', ['$state', 'common',
-   function($state, common) {
+angular.module('afisha').directive('calendarNav', ['$state', 'common', '$rootScope',
+   function($state, common, $rootScope) {
    return {
        restrict: 'E',
        templateUrl: 'templates/directives/calendar-nav.directive.html',
@@ -20,10 +20,16 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common',
                new Date('2017-02-11') : new Date(scope.date);
 
            scope.changeDate = function (newDate) {
+               $rootScope.$emit('reconfiguring:show');
+
                if (newDate) {
                    common.currentDate = newDate;
                    scope.date = common.currentDate;
-                   scope.change(newDate);
+
+                   setTimeout(() => {
+                       scope.change(newDate);
+                       $rootScope.$emit('reconfiguring:hide');
+                   }, 0);
                }
            };
 

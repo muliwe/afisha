@@ -7,17 +7,19 @@ angular.module('afisha').controller('FilmController',
         $scope.filmId = +$stateParams.filmId;
         $scope.city = common.currentCity;
         $scope.date = common.currentDate;
+        $scope.dataLoaded = false;
         $scope.cinemas = [];
-        $scope.cinemaHash = {};
 
         $scope.getFilm = function() {
             $scope.film = {};
             serverService.fetchFilm($scope.filmId, $scope.city.id, (err, film) => {
                 (film && film.shows || []).forEach(helperService.showConfigure);
+                film.shows = (film && film.shows || []).sort(helperService.sortByTime);
 
                 $scope.film = film || {};
 
                 $scope.refreshDate($scope.date);
+                $scope.dataLoaded = true;
             });
         };
 
@@ -25,32 +27,26 @@ angular.module('afisha').controller('FilmController',
             const dateString = new Date(date).toISOString().replace(/T.*$/, '');
             let haveCinema = {};
             let cinemas = [];
+            let cinemaHash = {};
 
             $scope.cinemas = [];
-            $scope.cinemaHash = {};
 
             ($scope.film.cinemas || []).forEach(cinema => {
-                $scope.cinemaHash[cinema.id] = cinema;
-                $scope.cinemaHash[cinema.id].shows = [];
+                cinemaHash[cinema.id] = cinema;
+                cinemaHash[cinema.id].shows = [];
             });
 
             // console.log(dateString);
 
-            ($scope.film && $scope.film.shows || []).forEach(show => {
-                if (show.date === dateString) {
-                    if (!haveCinema[show.cinema]) {
-                        haveCinema[show.cinema] = true;
-                        cinemas.push($scope.cinemaHash[show.cinema]);
-                    }
-                    $scope.cinemaHash[show.cinema].shows.push(show);
+            ($scope.film && $scope.film.shows || []).filter(show => show.date === dateString).forEach(show => {
+                if (!haveCinema[show.cinema]) {
+                    haveCinema[show.cinema] = true;
+                    cinemas.push(cinemaHash[show.cinema]);
                 }
+                cinemaHash[show.cinema].shows.push(show);
             });
 
             cinemas = cinemas.sort(helperService.sortByTitle);
-
-            cinemas.forEach(cinema => {
-                cinema.shows = cinema.shows.sort(helperService.sortByTime);
-            });
 
             $scope.cinemas = cinemas;
         };

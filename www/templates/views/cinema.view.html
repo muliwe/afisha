@@ -37,7 +37,7 @@
             <calendar-nav cinema="cinema" date="date" change="refreshDate"></calendar-nav>
         </ion-list>
 
-        <ion-list can-swipe="false">
+        <ion-list can-swipe="false" ng-if="dataLoaded">
             <cinema-schedule-cell film="film"
                                   ng-repeat="film in films">
             </cinema-schedule-cell>

@@ -22,7 +22,7 @@
 
         <calendar-nav film="film" date="date" change="refreshDate"></calendar-nav>
 
-        <ion-list can-swipe="false">
+        <ion-list can-swipe="false" ng-if="dataLoaded">
             <cinema-schedule-cell cinema="cinema" one-film="true"
                        ng-repeat="cinema in cinemas">
             </cinema-schedule-cell>

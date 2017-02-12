@@ -52,22 +52,38 @@ const ApplicationConfiguration = (function(){
             .run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout, common, localStorageService,
                 serverService) {
+
             let retainCounter = 0;
+
+            $rootScope.$on('reconfiguring:show', function() {
+                if (retainCounter === 0) {
+                    // console.log('show');
+                    $ionicLoading.show();
+                }
+                retainCounter++;
+            });
+
+            $rootScope.$on('reconfiguring:hide', function() {
+                $rootScope.$emit('loading:hide');
+            });
 
             const spinnerUrl = 'img/spinner.svg';
 
             const disableLoadingShowMock = $rootScope.$on('loading:show', function() {
                 retainCounter++;
+                console.log(retainCounter);
             });
 
             const disableLoadingHideMock = $rootScope.$on('loading:hide', function() {
                 retainCounter--;
+                console.log(retainCounter);
             });
 
             // Loading template prefetching.
             $ionicTemplateLoader.load(spinnerUrl).then(function() {
                 // Initial loading showing if necessary.
                 if (retainCounter) {
+                    // console.log('show');
                     $ionicLoading.show({
                         templateUrl: spinnerUrl
                     });
@@ -76,6 +92,7 @@ const ApplicationConfiguration = (function(){
                 disableLoadingShowMock();
                 $rootScope.$on('loading:show', function() {
                     if (retainCounter === 0) {
+                        // console.log('show');
                         $ionicLoading.show({
                             templateUrl: spinnerUrl
                         });
@@ -86,7 +103,9 @@ const ApplicationConfiguration = (function(){
                 disableLoadingHideMock();
                 $rootScope.$on('loading:hide', function() {
                     retainCounter--;
-                    if (retainCounter === 0) {
+                    if (retainCounter < 1) {
+                        retainCounter = 0;
+                        // console.log('hide');
                         $ionicLoading.hide();
                     }
                 });
