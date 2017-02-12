@@ -22,11 +22,21 @@
 
         <calendar-nav film="film" date="date" change="refreshDate"></calendar-nav>
 
+        <h3 ng-if="savedCinemas.length">Ваши кинотеатры</h3>
+
+        <ion-list ng-if="savedCinemas.length" can-swipe="false">
+            <cinema-schedule-cell cinema="cinema" one-film="true"
+                                  ng-repeat="cinema in savedCinemas">
+            </cinema-schedule-cell>
+        </ion-list>
+
+        <h3 ng-if="cinemas.length">Список кинотеатров</h3>
+
         <ion-list can-swipe="false" ng-if="dataLoaded">
             <cinema-schedule-cell cinema="cinema" one-film="true"
                        ng-repeat="cinema in cinemas">
             </cinema-schedule-cell>
-            <div ng-hide="cinemas.length">Расписание на этот день не найдено</div>
+            <div ng-hide="cinemas.length || savedCinemas.length">Расписание на этот день не найдено</div>
         </ion-list>
 
     </ion-content>

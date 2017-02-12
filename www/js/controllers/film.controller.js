@@ -9,6 +9,7 @@ angular.module('afisha').controller('FilmController',
         $scope.date = common.currentDate;
         $scope.dataLoaded = false;
         $scope.cinemas = [];
+        $scope.savedCinemas = [];
 
         $scope.getFilm = function() {
             $scope.film = {};
@@ -26,6 +27,21 @@ angular.module('afisha').controller('FilmController',
             });
         };
 
+        $scope.splitCinemas = function (cinemas) {
+            let cinemaIds = common.savedCinemas.map(cinema => cinema.id);
+
+            $scope.cinemas = [];
+            $scope.savedCinemas = [];
+
+            cinemas.sort(helperService.sortByTitle).forEach(cinema => {
+                if (cinemaIds.includes(cinema.id)) {
+                    $scope.savedCinemas.push(cinema);
+                } else {
+                    $scope.cinemas.push(cinema);
+                }
+            });
+        };
+
         $scope.refreshDate = function(date) {
             const dateString = new Date(date).toISOString().replace(/T.*$/, '');
             let haveCinema = {};
@@ -33,6 +49,7 @@ angular.module('afisha').controller('FilmController',
             let cinemaHash = {};
 
             $scope.cinemas = [];
+            $scope.savedCinemas = [];
 
             ($scope.film.cinemas || []).forEach(cinema => {
                 cinemaHash[cinema.id] = cinema;
@@ -51,7 +68,7 @@ angular.module('afisha').controller('FilmController',
 
             cinemas = cinemas.sort(helperService.sortByTitle);
 
-            $scope.cinemas = cinemas;
+            $scope.splitCinemas(cinemas);
         };
 
         $scope.openFilm = function() {
