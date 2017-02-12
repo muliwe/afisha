@@ -42,6 +42,31 @@ foreach my $city (keys %city)
 $city2{$city{$city}} = $city;
 }
 
+my %conf_lang=
+  (
+  'sci-fi' => 'Фантастика',
+  'action' => 'Экшн',
+  'drama' => 'Драма',
+  'kids' => 'Фильм-детям',
+  'humor' => 'Комедии',
+  'romance' => 'Мелодрама',
+  'disaster' => 'Фильм-катастрофа',
+  'fantasy' => 'Фильм-фантазия',
+  'adventure' => 'Приключения и фэнтэзи',
+  'detective' => 'Детектив',
+  'documentary' => 'Документальное кино',
+  'horror' => 'Ужас!',
+  'peplum' => 'Исторический',
+  'comics' => 'Кино-комикс',
+  'musical' => 'Мюзикл',
+  'military' => 'Война',
+  'sport' => 'Спорт',
+  'crime' => 'Криминальное',
+  'serials' => 'Сериалы',
+  
+#  '' => '',
+  );
+
 my $ymd = sub{sprintf '%04d-%02d-%02d',
     $_[5]+1900, $_[4]+1, $_[3]}->(localtime);
 
@@ -77,14 +102,14 @@ my @types = ('Places','Creations','Sessions');
 
 foreach my $type (@types) 
 {
-`/bin/rm $type/*.xml`;# if ($type ne 'Sessions');
+`/bin/rm $type/*.xml` if ($type ne 'Sessions');
 
 foreach my $file (@{$ref->{$type}->{Files}->{File}})
 {
 #print Dumper($file);
 my $file2 = $type ."/". $file->{filename};
 $xml{$file2} = "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". $file->{filename};
-&wget_url($file2,$xml{$file2});# if ($type ne 'Sessions');
+&wget_url($file2,$xml{$file2}) if ($type ne 'Sessions');
 };
 };
 
@@ -144,8 +169,8 @@ foreach my $film (@{$ref2->{Creation}})
 
 my $name = $film->{Name};
 $name =~ s/\'/\\\'/g;
-#Encode::_utf8_off($name);
-#Encode::from_to($name, "utf-8", "windows-1251");
+Encode::_utf8_off($name);
+Encode::from_to($name, "utf-8", "windows-1251");
 #encode("cp1251", $name);
 
 my $id = $film->{ObjectID};
@@ -154,7 +179,15 @@ my $shows = $film->{ViewCountDaily}/1;
 my $poster = (reftype $film->{Thumbnail} ne reftype '' ? '' : $film->{Thumbnail});
 
 my @data2;
-my $err = &dataselect("select id from ramblerfilms where ramblerid = $id", \@data2, \$connected, \$dbh);
+my $err = &dataselect("select r.id, f.anons, f.theme from ramblerfilms as r join afisha as a on r.ramblerid = a.ramblerid join films as f on f.filmid = a.id where r.ramblerid = $id", \@data2, \$connected, \$dbh);
+
+${$data2[0]}[1] =~ s/\"/\\\"/g;
+${$data2[0]}[1] =~ s/\n/\\n/g;
+
+my $anons = ${$data2[0]}[1] ? "\"${$data2[0]}[1]\"" : 'null';
+$anons =~ s!href=\\"/!href=\\"http://www.kinokadr.ru/!g;
+
+my $theme = $conf_lang{${$data2[0]}[2]} ? "\"$conf_lang{${$data2[0]}[2]}\"" : 'null';
 
 my $insert ;
 
@@ -188,13 +221,21 @@ if (-s $file) {
   }
 }
 
-$films .= <<EOF;
-{"id":$id,"title":"$name","age":"$age","shows":$shows,"poster":$poster},
+my $filmstr = <<EOF;
+{"id":$id,"title":"$name","age":"$age","shows":$shows,"poster":$poster,"anons":$anons,"theme":$theme},
 EOF
 
-Encode::_utf8_off($insert);
-Encode::from_to($insert, "utf-8", "windows-1251");
-#print $i++ ."$id: $insert;\n";
+print $filmstr;
+
+Encode::from_to($filmstr, "windows-1251", "utf-8");
+
+print $filmstr;
+
+$films .= $filmstr;
+
+#Encode::_utf8_off($insert);
+#Encode::from_to($insert, "utf-8", "windows-1251");
+print $i++ ."$id: $insert;\n";
 
 my @data3;
 my $err = &dataselect($insert, \@data3, \$connected, \$dbh);
