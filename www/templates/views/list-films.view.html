@@ -16,13 +16,9 @@
           on-refresh="refreshList()">
         </ion-refresher-->
 
-        <div class="button-bar" ng-show="currentCity" ng-click="toggleCity()">
-            Фильмы в городе {{currentCity.title}} &larrhk;
-        </div>
-
-        <div class="button-bar" ng-hide="currentCity" ng-click="toggleCity()">
-            Все фильмы в прокате &rarrhk;
-        </div>
+        <ion-toggle ng-model="currentCityOnly" ng-change="toggleChange()">
+            {{currentCityOnly ? 'Фильмы в городе ' + currentCity.title : 'Все фильмы в прокате' }}
+        </ion-toggle>
 
         <ion-list can-swipe="false">
                 <film-cell film="film" ng-repeat="film in films"></film-cell>

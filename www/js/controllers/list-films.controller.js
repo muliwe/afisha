@@ -5,9 +5,10 @@ angular.module('afisha').controller('ListFilmsController',
     function($scope, $state, common, serverService) {
         $scope.films = [];
 
-        $scope.currentCity = null;
+        $scope.currentCityOnly = false; // NB: will be toggled
+        $scope.currentCity = common.currentCity;
 
-        $scope.getCitiesList = function(city) {
+        $scope.getFilmsList = function(city) {
             $scope.films = [];
             serverService.fetchFilms(city, (err, films) => {
                 $scope.films = films || [];
@@ -15,7 +16,7 @@ angular.module('afisha').controller('ListFilmsController',
         };
 
         $scope.refreshList = function() {
-            $scope.getCitiesList(function() {
+            $scope.getFilmsList(function() {
                 $scope.$broadcast('scroll.refreshComplete');
             });
         };
@@ -26,11 +27,11 @@ angular.module('afisha').controller('ListFilmsController',
             });
         };
 
-        $scope.toggleCity = function() {
-            $scope.currentCity = $scope.currentCity ? null : common.currentCity;
-            $scope.getCitiesList($scope.currentCity);
+        $scope.toggleChange = () => {
+            $scope.currentCityOnly = !$scope.currentCityOnly;
+            $scope.getFilmsList($scope.currentCityOnly ? $scope.currentCity : null);
         };
 
-        $scope.toggleCity();
+        $scope.toggleChange();
     }
 ]);

@@ -8,7 +8,7 @@ angular.module('afisha').controller('ListCitiesController',
         $scope.currentCity = common.currentCity;
         $scope.city = common.currentCity;
 
-        $scope.getCitiesList = function(){
+        $scope.getFilmsList = function(){
             serverService.fetchCities((err, cities) => {
                 $scope.cities = cities || [];
                 $scope.city = $scope.cities.filter(city => city.id === $scope.currentCity.id)[0] || {};
@@ -17,7 +17,7 @@ angular.module('afisha').controller('ListCitiesController',
         };
 
         $scope.refreshList = function() {
-            $scope.getCitiesList(function() {
+            $scope.getFilmsList(function() {
                 $scope.$broadcast('scroll.refreshComplete');
             });
         };
