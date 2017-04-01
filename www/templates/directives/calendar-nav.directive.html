@@ -1,5 +1,5 @@
 <div class="button-bar calendar-nav">
     <a class="button " ng-repeat="aDate in dates track by $index"
-       ng-class="{'button-positive': aDate.getDate() === date.getDate()}"
+       ng-class="{'button-positive': aDate.getTime() === date.getTime()}"
        ng-click="changeDate(aDate)">{{ aDate | date:'dd/MM'}}</a>
 </div>

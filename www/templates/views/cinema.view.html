@@ -24,22 +24,30 @@
         </div>
 
         <div class="button-bar" ng-show="canSave">
-            <a class="button" ng-click="saveCinema()">Запомнить кинотеатр</a>
+            <ion-toggle ng-model="isSaved" ng-change="saveCinema()">
+                Добавить в избранное
+            </ion-toggle>
         </div>
 
         <div class="button-bar" ng-show="canCancel">
-            Сохранённый кинотеатр&nbsp;&nbsp; <a class="button assertive" ng-click="cancelCinema()">X</a>
+            <ion-toggle ng-model="isSaved" ng-change="cancelCinema()">
+                Избранный кинотеатр
+            </ion-toggle>
         </div>
 
-        <h3>Репертуар</h3>
+        <h4>Репертуар</h4>
 
-        <ion-list can-swipe="false">
-            <calendar-nav cinema="cinema" date="date" change="refreshDate"></calendar-nav>
-        </ion-list>
+        <div class="button-bar">
+            <ion-list can-swipe="false">
+                <calendar-nav cinema="cinema" date="date" change="refreshDate"></calendar-nav>
+            </ion-list>
+        </div>
 
-        <ion-toggle ng-model="useHalls" ng-change="toggleChange()">
-            {{useHalls ? 'Показать сеансы списком' : 'Сгруппировать по залам' }}
-        </ion-toggle>
+        <div class="button-bar">
+            <ion-toggle ng-model="useHalls" ng-change="toggleChange()">
+                {{useHalls ? 'Показать сеансы списком' : 'Сгруппировать по залам' }}
+            </ion-toggle>
+        </div>
 
         <ion-list can-swipe="false" ng-if="dataLoaded">
             <cinema-schedule-cell film="film"

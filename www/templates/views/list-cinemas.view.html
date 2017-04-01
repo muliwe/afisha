@@ -20,10 +20,10 @@
         </div>
 
         <div class="button-bar" ng-show="city.id === currentCity.id" >
-            {{city.title}} &#151; мой город
+            <a class="button" go-cities>{{city.title}} &#151; мой город</a>
         </div>
 
-        <h3 ng-if="savedCinemas.length">Ваши кинотеатры</h3>
+        <h4 ng-if="savedCinemas.length">Ваши кинотеатры</h4>
 
         <ion-list  ng-if="savedCinemas.length" can-swipe="false">
             <cinema-schedule-cell cinema="cinema" no-schedule="true"
@@ -31,7 +31,7 @@
             </cinema-schedule-cell>
         </ion-list>
 
-        <h3 ng-if="cinemas.length">Список кинотеатров</h3>
+        <h4 ng-if="cinemas.length">Список кинотеатров города {{city.title}}</h4>
 
         <ion-list  ng-if="cinemas.length" can-swipe="false">
             <cinema-schedule-cell cinema="cinema" no-schedule="true"

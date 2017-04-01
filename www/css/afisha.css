@@ -161,10 +161,23 @@ calendar-nav .calendar-nav {
     border-radius: 0 2px 2px 0;
 }
 
+.button-bar > .button:only-child {
+    border-radius: 2px;
+}
+
 .button.button-positive {
     background-color: #666;
 }
 
 .button.button-positive.activated {
     background-color: #999;
+}
+
+.button-bar .item-toggle {
+    width:100%;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 14px;
 }
