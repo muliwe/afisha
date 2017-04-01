@@ -13,6 +13,9 @@ angular.module('afisha').controller('CinemaController',
         $scope.date = common.currentDate;
         $scope.currentCity = common.currentCity;
 
+        let localCinema = {};
+        let showList = [];
+
         canRecount();
 
         $scope.refreshDate = function(date) {
@@ -32,7 +35,7 @@ angular.module('afisha').controller('CinemaController',
 
             // console.log(dateString);
 
-            ($scope.cinema.shows || []).filter(show => show.date === dateString).forEach(show => {
+            (showList || []).filter(show => show.date === dateString).forEach(show => {
                 if (!haveFilm[show.film]) {
                     haveFilm[show.film] = true;
                     films.push(filmsHash[show.film]);
@@ -73,18 +76,22 @@ angular.module('afisha').controller('CinemaController',
         $scope.getCinema = function() {
             serverService.fetchCinema($scope.cinemaId, (err, cinema) => {
                 if (cinema) {
-                    (cinema.shows || []).forEach(helperService.showConfigure);
-                    cinema.shows = (cinema.shows  || []).sort(helperService.sortByTime);
+                    localCinema = Object.assign({}, cinema);
+                    (localCinema.shows || []).forEach(helperService.showConfigure);
+                    showList = (localCinema.shows  || []).sort(helperService.sortByTime);
 
-                    if (!cinema.latitude || !cinema.longitude ||
+                    delete localCinema.shows;
+
+                    if (!localCinema.latitude || !localCinema.longitude ||
                         !common.currentLocation.longitude || !common.currentLocation.latitude) {
-                        cinema.radius = common.defaultCinemaRadius;
+                        localCinema.radius = common.defaultCinemaRadius;
                     } else {
-                        cinema.radius = parseInt(helperService.distance(cinema.longitude, cinema.latitude,
-                                common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
+                        localCinema.radius =
+                            parseInt(helperService.distance(localCinema.longitude, localCinema.latitude,
+                            common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
                     }
 
-                    $scope.cinema = cinema;
+                    $scope.cinema = localCinema;
                     $scope.city = cinema.aCity;
                 }
 

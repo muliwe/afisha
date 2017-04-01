@@ -27,5 +27,7 @@ angular.module('constants').constant('common', {
     defaultCinemaRadius: 30,
     maxRadius: 300,
     nearRadius: 20,
-    cache: {}
+    cache: {},
+    cacheDates: {},
+    maxChacheAge: 1000 * 60 * 60 // an hour
 });

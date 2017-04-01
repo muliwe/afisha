@@ -19,15 +19,14 @@ angular.module('afisha').controller('FilmController',
         $scope.getFilm = function() {
             $scope.film = {};
             serverService.fetchFilm($scope.filmId, $scope.city.id || common.defaultCity.id, (err, film) => {
-                console.log($scope.filmId, $scope.city.id || common.defaultCity.id, err, film);
-                film  = film || {};
+                let localFilm  = Object.assign({}, film);
 
-                (film.shows || []).forEach(helperService.showConfigure);
-                showList = (film.shows || []).sort(helperService.sortByTime);
-                delete film.shows;
-                film.anons = helperService.prepareAnons(film.anons);
+                (localFilm.shows || []).forEach(helperService.showConfigure);
+                showList = (localFilm.shows || []).sort(helperService.sortByTime);
+                delete localFilm.shows;
+                localFilm.anons = helperService.prepareAnons(film.anons);
 
-                $scope.film = film;
+                $scope.film = localFilm;
 
                 $scope.refreshDate($scope.date);
                 $scope.dataLoaded = true;

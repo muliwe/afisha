@@ -4,8 +4,9 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
     let self = this;
 
     self.fetchCities = (cb) => {
-        if (common.cache.cities) {
-            return cb(null, common.cache.cities);
+        const key = `cities`;
+        if (checkCache(key)) {
+            return cb(null, common.cache[key]);
         }
 
         $rootScope.$emit('loading:show');
@@ -16,16 +17,17 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                common.cache.cities = response.data.sort(helperService.sortByTitle);
-
-                return common.cache.cities;
+                const cities = response.data.sort(helperService.sortByTitle);
+                setCache(key, cities);
+                return cities;
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchCinemas = (cb) => {
-        if (common.cache.cinemas) {
-            return cb(null, common.cache.cinemas);
+        const key = `cinemas`;
+        if (checkCache(key)) {
+            return cb(null, common.cache[key]);
         }
 
         $rootScope.$emit('loading:show');
@@ -36,14 +38,19 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                common.cache.cinemas = response.data.sort(helperService.sortByShows);
-
-                return common.cache.cinemas;
+                const cinemas = response.data.sort(helperService.sortByShows);
+                setCache(key, cinemas);
+                return cinemas;
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchFilms = (city, cb) => {
+        const key = `films${city ? city.id : ''}`;
+        if (checkCache(key)) {
+            return cb(null, common.cache[key]);
+        }
+
         $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
@@ -52,12 +59,19 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                return response.data.sort(helperService.sortByShows);
+                const films = response.data.sort(helperService.sortByShows);
+                setCache(key, films);
+                return films;
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
 
     self.fetchFilm = (filmId, cityId, cb) => {
+        const key = `film${filmId}${cityId}`;
+        if (checkCache(key)) {
+            return cb(null, common.cache[key]);
+        }
+
         $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
@@ -66,7 +80,9 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                return response.data;
+                const film = response.data;
+                setCache(key, film);
+                return film;
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
@@ -83,6 +99,11 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
     };
 
     self.fetchCinema = (cinemaId, cb) => {
+        const key = `cinema${cinemaId}`;
+        if (checkCache(key)) {
+            return cb(null, common.cache[key]);
+        }
+
         $rootScope.$emit('loading:show');
         $http({
             method: 'GET',
@@ -91,7 +112,9 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
             responseType: 'json'
         }).then(function(response) {
             successCallback(response, function(response) {
-                return response.data;
+                const cinema = response.data;
+                setCache(key, cinema);
+                return cinema;
             }, cb);
         }, errorResponse => {errorCallback(errorResponse, cb);});
     };
@@ -108,5 +131,15 @@ angular.module('afisha').service('serverService', function($http, common, $rootS
     function errorCallback(response, cb) {
         $rootScope.$emit('loading:hide');
         cb(response.data || 'Request failed', null);
+    }
+
+    function checkCache(key) {
+        return (common.cache[key] && common.cacheDates[key] &&
+            common.cacheDates[key].getTime() > new Date().getTime() - common.maxChacheAge);
+    }
+
+    function setCache(key, value) {
+        common.cache[key] = value;
+        common.cacheDates[key] = new Date();
     }
 });
