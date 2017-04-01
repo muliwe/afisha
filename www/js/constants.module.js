@@ -16,5 +16,8 @@ angular.module('constants').constant('common', {
     },
     savedCinemas: [],
     useHalls: true,
+    sortByTitle: true,
+    maxRadius: 300,
+    nearRadius: 10,
     cache: {}
 });

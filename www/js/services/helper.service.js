@@ -3,6 +3,24 @@
 angular.module('afisha').service('helperService', function() {
     let self = this;
 
+    self.distance = (lon1, lat1, lon2, lat2) => {
+        /** Converts numeric degrees to radians */
+        if (typeof(Number.prototype.toRad) === "undefined") {
+            Number.prototype.toRad = function() {
+                return this * Math.PI / 180;
+            }
+        }
+
+        const R = 6371; // Radius of the earth in km
+        const dLat = (lat2 - lat1).toRad();  // Javascript functions in radians
+        const dLon = (lon2 - lon1).toRad();
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in km
+    };
+
     self.showConfigure = show => {
         show.timeParsed = show.time;
         show.timeParsed = show.timeParsed.replace(':', '');
@@ -30,6 +48,12 @@ angular.module('afisha').service('helperService', function() {
         return 0;
     };
 
+    self.sortByNear = (a, b) => {
+        if (a.radius < b.radius) return -1;
+        if (a.radius > b.radius) return 1;
+        return 0;
+    };
+
     self.prepareAnons = anons => {
         if (!anons) {
             return anons;
@@ -41,21 +65,3 @@ angular.module('afisha').service('helperService', function() {
         return anons;
     }
 });
-
-function distance(lon1, lat1, lon2, lat2) {
-    const R = 6371; // Radius of the earth in km
-    const dLat = (lat2 - lat1).toRad();  // Javascript functions in radians
-    const dLon = (lon2 - lon1).toRad();
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in km
-}
-
-/** Converts numeric degrees to radians */
-if (typeof(Number.prototype.toRad) === "undefined") {
-    Number.prototype.toRad = function() {
-        return this * Math.PI / 180;
-    }
-}

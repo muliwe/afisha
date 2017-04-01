@@ -230,7 +230,12 @@ const ApplicationConfiguration = (function(){
                 // console.log(common.useHalls);
             }
 
-            if (localStorageService.get('savedCinemas')) {
+                if (localStorageService.get('sortByTitle')) {
+                    common.sortByTitle = JSON.parse(localStorageService.get('sortByTitle'));
+                    // console.log(common.sortByTitle);
+                }
+
+                if (localStorageService.get('savedCinemas')) {
                 common.savedCinemas = JSON.parse(localStorageService.get('savedCinemas'));
                 // console.log(common.savedCinemas);
             }

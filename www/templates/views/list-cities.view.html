@@ -14,6 +14,13 @@
         </ion-list>
 
         <h4>Или найдите свой город:</h4>
+
+        <div class="button-bar">
+            <ion-toggle ng-model="sortByTitle" ng-change="toggleSortChange()">
+                {{sortByTitle ? 'Все города по алфавиту' : 'Только ближайшие к вам' }}
+            </ion-toggle>
+        </div>
+
         <ion-list can-swipe="false">
             <city-cell city="aCity" ng-repeat="aCity in cities"></city-cell>
         </ion-list>
