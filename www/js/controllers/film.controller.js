@@ -48,6 +48,7 @@ angular.module('afisha').controller('FilmController',
             let cinemas = [];
             let cinemaHash = {};
 
+            $scope.date = new Date(date);
             $scope.cinemas = [];
             $scope.savedCinemas = [];
 
