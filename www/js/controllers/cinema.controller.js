@@ -76,6 +76,14 @@ angular.module('afisha').controller('CinemaController',
                     (cinema.shows || []).forEach(helperService.showConfigure);
                     cinema.shows = (cinema.shows  || []).sort(helperService.sortByTime);
 
+                    if (!cinema.latitude || !cinema.longitude ||
+                        !common.currentLocation.longitude || !common.currentLocation.latitude) {
+                        cinema.radius = common.defaultCinemaRadius;
+                    } else {
+                        cinema.radius = parseInt(helperService.distance(cinema.longitude, cinema.latitude,
+                                common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
+                    }
+
                     $scope.cinema = cinema;
                     $scope.city = cinema.aCity;
                 }

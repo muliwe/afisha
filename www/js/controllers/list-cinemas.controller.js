@@ -7,16 +7,31 @@ angular.module('afisha').controller('ListCinemasController',
         $scope.savedCinemas = [];
 
         $scope.city = {};
+        $scope.isCurrentCity = false;
         $scope.cityId = +$stateParams.cityId;
         $scope.currentCity = common.currentCity;
-        $scope.isCurrentCity = false;
+        $scope.sortByTitle = common.sortByTitle;
+
+        let cinemaList = [];
 
         recountCurrentCity();
 
         $scope.getCityCinemas = function(){
             serverService.fetchCity($scope.cityId, (city, cinemas) => {
                 $scope.city = city;
-                $scope.splitCinemas(cinemas);
+                cinemaList = cinemas || [];
+
+                cinemaList.forEach(cinema => {
+                    if (!cinema.latitude || !cinema.longitude ||
+                        !common.currentLocation.longitude || !common.currentLocation.latitude) {
+                        cinema.radius = common.defaultCinemaRadius;
+                        return;
+                    }
+                    cinema.radius = parseInt(helperService.distance(cinema.longitude, cinema.latitude,
+                        common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
+                });
+
+                $scope.splitCinemas();
             });
         };
 
@@ -26,19 +41,35 @@ angular.module('afisha').controller('ListCinemasController',
             recountCurrentCity();
         };
 
-        $scope.splitCinemas = function (cinemas) {
+        $scope.splitCinemas = function () {
             let cinemaIds = common.savedCinemas.map(cinema => cinema.id);
 
             $scope.cinemas = [];
             $scope.savedCinemas = [];
 
-            cinemas.sort(helperService.sortByTitle).forEach(cinema => {
-               if (cinemaIds.includes(cinema.id)) {
-                   $scope.savedCinemas.push(cinema);
-               } else {
-                   $scope.cinemas.push(cinema);
-                }
-            });
+            let cinemas = [];
+            let savedCinemas = [];
+
+            const sortHelper = $scope.sortByTitle ? helperService.sortByTitle : helperService.sortByNear;
+
+            cinemaList.filter(cinema => $scope.sortByTitle || cinema.radius < common.nearRadius)
+                .sort(sortHelper).forEach(cinema => {
+                   if (cinemaIds.includes(cinema.id)) {
+                       savedCinemas.push(cinema);
+                   } else {
+                       cinemas.push(cinema);
+                   }
+                });
+
+            $scope.cinemas = cinemas;
+            $scope.savedCinemas = savedCinemas;
+        };
+
+        $scope.toggleSortChange = () => {
+            $scope.sortByTitle = !$scope.sortByTitle;
+            common.sortByTitle = $scope.sortByTitle;
+            localStorageService.set('sortByTitle', JSON.stringify(common.sortByTitle));
+            $scope.splitCinemas();
         };
 
         $scope.openCinema = function (cinema) {

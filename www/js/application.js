@@ -51,7 +51,7 @@ const ApplicationConfiguration = (function(){
         angular.module(ApplicationConfiguration.applicationModuleName)
             .run(function($ionicPlatform, $ionicConfig, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $ionicTemplateLoader, $ionicBackdrop, $ionicPopup, $timeout, common, localStorageService,
-                serverService) {
+                serverService, $cordovaGeolocation) {
 
             let retainCounter = 0;
 
@@ -222,7 +222,16 @@ const ApplicationConfiguration = (function(){
 
             if (localStorageService.get('currentCity')) {
                 common.currentCity = JSON.parse(localStorageService.get('currentCity'));
+
+                if (!common.currentCity.id) {
+                    common.currentCity = Object.assign({}, common.defaultCity);
+                }
                 // console.log(common.currentCity);
+            }
+
+            if (localStorageService.get('currentLocation')) {
+                common.currentLocation = JSON.parse(localStorageService.get('currentLocation'));
+                // console.log(common.currentLocation);
             }
 
             if (localStorageService.get('useHalls')) {
@@ -230,15 +239,35 @@ const ApplicationConfiguration = (function(){
                 // console.log(common.useHalls);
             }
 
-                if (localStorageService.get('sortByTitle')) {
-                    common.sortByTitle = JSON.parse(localStorageService.get('sortByTitle'));
-                    // console.log(common.sortByTitle);
-                }
+            if (localStorageService.get('sortByTitle')) {
+                common.sortByTitle = JSON.parse(localStorageService.get('sortByTitle'));
+                // console.log(common.sortByTitle);
+            }
 
-                if (localStorageService.get('savedCinemas')) {
+            if (localStorageService.get('savedCinemas')) {
                 common.savedCinemas = JSON.parse(localStorageService.get('savedCinemas'));
                 // console.log(common.savedCinemas);
             }
+
+            const watchOptions = {
+                timeout: 1000 * 30, // 30 seconds
+                maximumAge: 1000 * 60 * 10, // 10 minutes
+                enableHighAccuracy: false // may cause errors if true
+            };
+
+            const watch = $cordovaGeolocation.watchPosition(watchOptions);
+            watch.then(
+                null,
+                function(err) {
+                    // error
+                },
+                function(position) {
+                    // console.log(position.coords);
+                    common.currentLocation.latitude = position.coords.latitude;
+                    common.currentLocation.longitude = position.coords.longitude;
+
+                    localStorageService.set('currentLocation', JSON.stringify(common.currentLocation));
+                });
 
             serverService.fetchCities((err, cities) => {
                 // console.log(err, cities);

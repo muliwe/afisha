@@ -1,23 +1,30 @@
 'use strict';
 
 angular.module('afisha').controller('FilmController',
-    ['$scope', '$state', '$stateParams', 'common', 'serverService', 'helperService',
-    function($scope, $state, $stateParams, common, serverService, helperService) {
+    ['$scope', '$state', '$stateParams', 'common', 'serverService', 'helperService', 'localStorageService',
+    function($scope, $state, $stateParams, common, serverService, helperService, localStorageService) {
+        $scope.cinemas = [];
+        $scope.savedCinemas = [];
+
         $scope.film = {};
         $scope.filmId = +$stateParams.filmId;
         $scope.city = common.currentCity;
         $scope.date = common.currentDate;
         $scope.dataLoaded = false;
-        $scope.cinemas = [];
-        $scope.savedCinemas = [];
+        $scope.sortByTitle = common.sortByTitle;
+
+        let cinemaList = [];
+        let showList = [];
 
         $scope.getFilm = function() {
             $scope.film = {};
-            serverService.fetchFilm($scope.filmId, $scope.city.id, (err, film) => {
+            serverService.fetchFilm($scope.filmId, $scope.city.id || common.defaultCity.id, (err, film) => {
+                console.log($scope.filmId, $scope.city.id || common.defaultCity.id, err, film);
                 film  = film || {};
 
                 (film.shows || []).forEach(helperService.showConfigure);
-                film.shows = (film.shows || []).sort(helperService.sortByTime);
+                showList = (film.shows || []).sort(helperService.sortByTime);
+                delete film.shows;
                 film.anons = helperService.prepareAnons(film.anons);
 
                 $scope.film = film;
@@ -27,19 +34,36 @@ angular.module('afisha').controller('FilmController',
             });
         };
 
-        $scope.splitCinemas = function (cinemas) {
+        $scope.splitCinemas = function () {
             let cinemaIds = common.savedCinemas.map(cinema => cinema.id);
 
             $scope.cinemas = [];
             $scope.savedCinemas = [];
 
-            cinemas.sort(helperService.sortByTitle).forEach(cinema => {
+            let cinemas = [];
+            let savedCinemas = [];
+
+            const sortHelper = $scope.sortByTitle ? helperService.sortByTitle : helperService.sortByNear;
+
+            cinemaList.filter(cinema => $scope.sortByTitle || cinema.radius < common.nearRadius)
+                .sort(sortHelper)
+                .forEach(cinema => {
                 if (cinemaIds.includes(cinema.id)) {
-                    $scope.savedCinemas.push(cinema);
+                    savedCinemas.push(cinema);
                 } else {
-                    $scope.cinemas.push(cinema);
+                    cinemas.push(cinema);
                 }
             });
+
+            $scope.cinemas = cinemas;
+            $scope.savedCinemas = savedCinemas;
+        };
+
+        $scope.toggleSortChange = () => {
+            $scope.sortByTitle = !$scope.sortByTitle;
+            common.sortByTitle = $scope.sortByTitle;
+            localStorageService.set('sortByTitle', JSON.stringify(common.sortByTitle));
+            $scope.splitCinemas();
         };
 
         $scope.refreshDate = function(date) {
@@ -59,7 +83,7 @@ angular.module('afisha').controller('FilmController',
 
             // console.log(dateString);
 
-            ($scope.film && $scope.film.shows || []).filter(show => show.date === dateString).forEach(show => {
+            (showList || []).filter(show => show.date === dateString).forEach(show => {
                 if (!haveCinema[show.cinema]) {
                     haveCinema[show.cinema] = true;
                     cinemas.push(cinemaHash[show.cinema]);
@@ -67,9 +91,19 @@ angular.module('afisha').controller('FilmController',
                 cinemaHash[show.cinema].shows.push(show);
             });
 
-            cinemas = cinemas.sort(helperService.sortByTitle);
+            cinemaList = cinemas;
 
-            $scope.splitCinemas(cinemas);
+            cinemaList.forEach(cinema => {
+                if (!cinema.latitude || !cinema.longitude ||
+                    !common.currentLocation.longitude || !common.currentLocation.latitude) {
+                    cinema.radius = common.defaultCinemaRadius;
+                    return;
+                }
+                cinema.radius = parseInt(helperService.distance(cinema.longitude, cinema.latitude,
+                    common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
+            });
+
+            $scope.splitCinemas();
         };
 
         $scope.openFilm = function() {

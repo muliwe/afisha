@@ -23,6 +23,12 @@
             <a class="button" go-cities>{{city.title}} &#151; мой город</a>
         </div>
 
+        <div class="button-bar">
+            <ion-toggle ng-model="sortByTitle" ng-change="toggleSortChange()">
+                {{sortByTitle ? 'Все кинотеатры' : 'Ближайшие кинотеатры' }}
+            </ion-toggle>
+        </div>
+
         <h4 ng-if="savedCinemas.length">Ваши кинотеатры</h4>
 
         <ion-list  ng-if="savedCinemas.length" can-swipe="false">

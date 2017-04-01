@@ -181,3 +181,7 @@ calendar-nav .calendar-nav {
     margin-bottom: 10px;
     padding: 14px;
 }
+
+.button-bar a.button {
+    margin-bottom: 10px;
+}

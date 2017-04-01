@@ -22,6 +22,12 @@
 
         <calendar-nav film="film" date="date" change="refreshDate"></calendar-nav>
 
+        <div class="button-bar">
+            <ion-toggle ng-model="sortByTitle" ng-change="toggleSortChange()">
+                {{sortByTitle ? 'Все кинотеатры' : 'Ближайшие кинотеатры' }}
+            </ion-toggle>
+        </div>
+
         <h3 ng-if="savedCinemas.length">Ваши кинотеатры</h3>
 
         <ion-list ng-if="savedCinemas.length" can-swipe="false">

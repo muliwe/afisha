@@ -16,7 +16,7 @@ angular.module('afisha').controller('ListCitiesController',
                 cityList = cities || [];
                 cityList.forEach(city => {
                     if (!city.latitude || !city.longitude) {
-                        city.radius = 1000;
+                        city.radius = common.defaultCityRadius;
                         return;
                     }
                     city.radius = helperService.distance(city.longitude, city.latitude,

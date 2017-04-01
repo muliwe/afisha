@@ -5,6 +5,7 @@
             <div ng-show="noSchedule">
                 <p>{{cinema.address}}</p>
                 <p ng-if="cinema.metro">Метро <b>{{cinema.metro}}</b></p>
+                <p ng-if="cinema.radius < 10">Находится в {{cinema.radius}} км</p>
             </div>
         </div>
         <div ng-hide="noSchedule">
