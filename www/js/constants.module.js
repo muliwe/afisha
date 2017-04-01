@@ -10,6 +10,10 @@ angular.module('constants').constant('common', {
         latitude: 55.7495307478992,
         longitude: 37.6213073730469
     },
+    currentLocation: {
+        latitude: 55.7495307478992,
+        longitude: 37.6213073730469
+    },
     savedCinemas: [],
     useHalls: true,
     cache: {}
