@@ -22,6 +22,7 @@ angular.module('afisha').controller('CinemaController',
             let filmsHash = {};
 
             $scope.films = [];
+            $scope.date = new Date(date);
 
             ($scope.cinema.films || []).forEach(film => {
                 filmsHash[film.id] = film;
@@ -120,6 +121,8 @@ angular.module('afisha').controller('CinemaController',
             // console.log($scope.cinema, $scope.city);
 
             $scope.canSaveCity = $scope.city.id && $scope.cinema.city !== $scope.currentCity.id;
+
+            $scope.isSaved = (common.savedCinemas.filter(cinema => cinema.id === $scope.cinemaId)).length === 1;
 
             $scope.canSave = !$scope.canSaveCity &&
                 (common.savedCinemas.filter(cinema => cinema.id === $scope.cinemaId)).length === 0;
