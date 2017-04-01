@@ -17,7 +17,8 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common', '$rootSco
 
            // @todo remove hardcoded date
            let date = scope.date.getTime() > new Date('2017-02-12').getTime() ? new Date('2017-02-12') :
-               (scope.date.getTime() < new Date().getTime() ? new Date() : new Date(scope.date));
+               // (scope.date.getTime() < new Date().getTime() ? new Date() :
+               new Date(scope.date);
 
            scope.changeDate = function (newDate) {
                if (newDate && common.currentDate !== newDate) {
@@ -36,7 +37,9 @@ angular.module('afisha').directive('calendarNav', ['$state', 'common', '$rootSco
 
            // @todo remove hardcoded date
            scope.changeDate(scope.date.getTime() > new Date('2017-02-18').getTime() ? new Date(date) :
-               scope.date.getTime() < new Date().getTime() ? new Date() : new Date(scope.date));
+               // scope.date.getTime() < new Date().getTime() ? new Date() :
+               new Date(scope.date)
+           );
 
            for (let i = 0; i < 7; i++) {
                scope.dates.push(new Date(date));
