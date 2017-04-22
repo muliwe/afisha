@@ -28,7 +28,11 @@
             </ion-toggle>
         </div>
 
-        <h3 ng-if="savedCinemas.length">Ваши кинотеатры</h3>
+        <h4 ng-if="savedCinemas.length">
+            <a class="button button-right" go-map>На карте</a>
+            Ваши кинотеатры
+        </h4>
+
 
         <ion-list ng-if="savedCinemas.length" can-swipe="false">
             <cinema-schedule-cell cinema="cinema" one-film="true"
@@ -36,7 +40,11 @@
             </cinema-schedule-cell>
         </ion-list>
 
-        <h3 ng-if="cinemas.length">Список кинотеатров</h3>
+        <h4 ng-if="cinemas.length">
+            <a class="button button-right" go-map>На карте</a>
+            Список кинотеатров
+            <small go-cinemas>Город {{city.title}}</small>
+        </h4>
 
         <ion-list can-swipe="false" ng-if="dataLoaded">
             <cinema-schedule-cell cinema="cinema" one-film="true"

@@ -9,8 +9,48 @@ a:hover {
 }
 
 
-h1, .h1, h2, .h2, h3, .h3 {
+h3, .h3,  h4, .h4 {
+    margin-top: 5px;
+}
+
+h3 b {
+    display: inline-block;
+    margin-top: 4px;
+}
+
+h4.for-button {
     margin-top: 0;
+    min-height: 43px;
+}
+
+h1:after, .h1:after, h2:after, .h2:after, h3:after, .h3:after, h4:after, .h4:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small, h1 .small, h2 .small, h3 .small, h4 .small, h5 .small, h6 .small, .h1 .small, .h2 .small, .h3 .small, .h4 .small, .h5 .small, .h6 .small {
+    color: inherit;
+    display: block
+}
+
+.button {
+    line-height: 41px;
+}
+
+.button-right {
+    margin-left: 5px;
+    float:right;
+    color: #407ab4;
+    padding-top: 1px;
+}
+
+ion-item .button-right {
+    border-color: #6663;
+    border-width: 1px;
 }
 
 ion-view, .pane, .view {
@@ -70,6 +110,7 @@ img.img-vert2 {
     border: 0;
     box-shadow: none;
     margin: 0;
+    min-height: 0;
 }
 
 .well.row {
@@ -154,15 +195,27 @@ calendar-nav .calendar-nav {
 }
 
 .button-bar > .button:first-child {
-    border-radius: 2px 0 0 2px;
+    border-radius: 5px 0 0 5px;
 }
 
 .button-bar > .button:last-child {
-    border-radius: 0 2px 2px 0;
+    border-radius: 0 5px 5px 0;
 }
 
 .button-bar > .button:only-child {
-    border-radius: 2px;
+    border-radius: 5px;
+}
+
+.list > city-cell:first-child ion-item {
+    border-radius: 5px 5px 0 0;
+}
+
+.list > city-cell:last-child ion-item {
+    border-radius: 0 0 5px 5px;
+}
+
+.list > city-cell:only-child ion-item {
+    border-radius: 5px;
 }
 
 .button.button-positive {
