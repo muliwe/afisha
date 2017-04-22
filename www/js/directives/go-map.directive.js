@@ -26,8 +26,10 @@ angular.module('afisha').directive('goMap', ['$state', '$ionicModal',
             };
 
             scope.closePopover = () => {
-                scope.popover.remove();
-                scope.popover = null;
+                if (scope.popover) {
+                    scope.popover.remove();
+                    scope.popover = null;
+                }
             };
 
             //Cleanup the popover when we're done with it!
