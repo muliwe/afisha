@@ -41,14 +41,17 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
     line-height: 41px;
 }
 
-.button-right {
+go-map {
     margin-left: 5px;
     float:right;
     color: #407ab4;
-    padding-top: 1px;
 }
 
-ion-item .button-right {
+.modal.active {
+    display: block;
+}
+
+ion-item go-map .button {
     border-color: #6663;
     border-width: 1px;
 }
