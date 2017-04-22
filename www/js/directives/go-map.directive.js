@@ -27,8 +27,9 @@ angular.module('afisha').directive('goMap', ['$state', '$ionicModal',
 
             scope.closePopover = () => {
                 if (scope.popover) {
-                    scope.popover.remove();
-                    scope.popover = null;
+                    scope.popover.remove().then(function() {
+                        scope.popover = null;
+                    });
                 }
             };
 
@@ -45,6 +46,12 @@ angular.module('afisha').directive('goMap', ['$state', '$ionicModal',
             // Execute action on remove popover
             scope.$on('popover.removed', () => {
                 // Execute action
+            });
+
+            scope.$on('$stateChangeStart', () => {
+                if (scope.popover) {
+                    scope.popover.remove();
+                }
             });
         }
     };
