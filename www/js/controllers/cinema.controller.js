@@ -12,13 +12,43 @@ angular.module('afisha').controller('CinemaController',
         $scope.cinemaId = +$stateParams.cinemaId;
         $scope.date = common.currentDate;
         $scope.currentCity = common.currentCity;
+        $scope.stateTitle = '';
 
         let localCinema = {};
         let showList = [];
 
         canRecount();
 
-        $scope.refreshDate = function(date) {
+        $scope.getInfo = () => {
+            serverService.fetchCinema($scope.cinemaId, (err, cinema) => {
+                if (cinema) {
+                    localCinema = Object.assign({}, cinema);
+                    (localCinema.shows || []).forEach(helperService.showConfigure);
+                    showList = (localCinema.shows  || []).sort(helperService.sortByTime);
+
+                    delete localCinema.shows;
+
+                    if (!localCinema.latitude || !localCinema.longitude ||
+                        !common.currentLocation.longitude || !common.currentLocation.latitude) {
+                        localCinema.radius = common.defaultCinemaRadius;
+                    } else {
+                        localCinema.radius =
+                            parseInt(helperService.distance(localCinema.longitude, localCinema.latitude,
+                                    common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
+                    }
+
+                    $scope.cinema = localCinema;
+                    $scope.stateTitle = localCinema.title;
+                    $scope.city = cinema.aCity;
+                }
+
+                $scope.refreshDate($scope.date);
+                canRecount();
+                $scope.dataLoaded = true;
+            });
+        };
+
+        $scope.refreshDate = date => {
             const dateString = new Date(date).toISOString().replace(/T.*$/, '');
             let haveFilm = {};
             let films = [];
@@ -73,47 +103,19 @@ angular.module('afisha').controller('CinemaController',
             $scope.films = films;
         };
 
-        $scope.getCinema = function() {
-            serverService.fetchCinema($scope.cinemaId, (err, cinema) => {
-                if (cinema) {
-                    localCinema = Object.assign({}, cinema);
-                    (localCinema.shows || []).forEach(helperService.showConfigure);
-                    showList = (localCinema.shows  || []).sort(helperService.sortByTime);
-
-                    delete localCinema.shows;
-
-                    if (!localCinema.latitude || !localCinema.longitude ||
-                        !common.currentLocation.longitude || !common.currentLocation.latitude) {
-                        localCinema.radius = common.defaultCinemaRadius;
-                    } else {
-                        localCinema.radius =
-                            parseInt(helperService.distance(localCinema.longitude, localCinema.latitude,
-                            common.currentLocation.longitude, common.currentLocation.latitude) + 0.6, 10);
-                    }
-
-                    $scope.cinema = localCinema;
-                    $scope.city = cinema.aCity;
-                }
-
-                $scope.refreshDate($scope.date);
-                canRecount();
-                $scope.dataLoaded = true;
-            });
-        };
-
-        $scope.saveCinema = function () {
+        $scope.saveCinema = () => {
             common.savedCinemas.push($scope.cinema);
             localStorageService.set('savedCinemas', JSON.stringify(common.savedCinemas));
             canRecount();
         };
 
-        $scope.cancelCinema = function () {
+        $scope.cancelCinema = () => {
             common.savedCinemas = common.savedCinemas.filter(cinema => cinema.id !== $scope.cinemaId);
             localStorageService.set('savedCinemas', JSON.stringify(common.savedCinemas));
             canRecount();
         };
 
-        $scope.saveCity = function () {
+        $scope.saveCity = () => {
             $scope.currentCity = common.currentCity = $scope.city;
             localStorageService.set('currentCity', JSON.stringify($scope.city));
             canRecount();

@@ -1,58 +1,24 @@
 'use strict';
 
-angular.module('afisha').directive('goMap', ['$state', '$ionicModal',
-    function($state, $ionicModal) {
+angular.module('afisha').directive('goMap', ['$state',
+    function($state) {
     return {
         restrict: 'E',
-        templateUrl: 'templates/popovers/open.popover.html',
+        templateUrl: 'templates/directives/go-map.directive.html',
         scope: {
-            items: '@'
+            go: '@',
+            id: '@'
         },
         link: function (scope, element, attr) {
-            scope.popover = null;
-
-            scope.openPopover = e => {
-                if (scope.popover) {
-                    scope.popover.remove();
-                }
-
-                $ionicModal.fromTemplateUrl('templates/popovers/maps.popover.html', {
-                    scope,
-                    animation: 'fade-in'
-                }).then(aPopover => {
-                    scope.popover = aPopover;
-                    scope.popover.show(e);
-                });
+            const keys = {
+                cinemasmap: 'cityId',
+                filmmap: 'filmId',
+                cinemamap: 'cinemaId'
             };
 
-            scope.closePopover = () => {
-                if (scope.popover) {
-                    scope.popover.remove().then(function() {
-                        scope.popover = null;
-                    });
-                }
-            };
-
-            //Cleanup the popover when we're done with it!
-            scope.$on('$destroy', () => {
-                scope.popover.remove();
-            });
-
-            // Execute action on hidden popover
-            scope.$on('popover.hidden', () => {
-                // Execute action
-            });
-
-            // Execute action on remove popover
-            scope.$on('popover.removed', () => {
-                // Execute action
-            });
-
-            scope.$on('$stateChangeStart', () => {
-                if (scope.popover) {
-                    scope.popover.remove();
-                }
-            });
+            element.on('click', function () {
+                console.log(scope.go, {[keys[scope.go] || 'id']: scope.id});
+                $state.go(scope.go, {[keys[scope.go] || 'id']: scope.id});});
         }
     };
 }]);

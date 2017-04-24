@@ -1,4 +1,4 @@
-<ion-view class="background" ng-init="getCityCinemas()" cache-view="false">
+<ion-view class="background" ng-init="getInfo()" cache-view="false">
     <ion-nav-bar class="bar-transparent bar">
         <ion-nav-back-button class="button-clear">
             <i class="ion-arrow-left-c"></i>
@@ -8,7 +8,7 @@
                     menu-toggle="right"></button>
         </ion-nav-buttons>
 
-        <ion-nav-title>{{city.title}}</ion-nav-title>
+        <ion-nav-title>{{stateTitle}}</ion-nav-title>
 
     </ion-nav-bar>
 
@@ -29,7 +29,7 @@
             </ion-toggle>
         </div>
 
-        <go-map ng-if="savedCinemas.length" items="savedCinemas"></go-map>
+        <go-map ng-if="savedCinemas.length" go="cinemasmap" id="{{cityId}}"></go-map>
 
         <h4 ng-if="savedCinemas.length" class="for-button">
             Ваши кинотеатры
@@ -41,7 +41,7 @@
             </cinema-schedule-cell>
         </ion-list>
 
-        <go-map ng-if="cinemas.length" items="cinemas"></go-map>
+        <go-map ng-if="cinemas.length" go="cinemasmap" id="{{cityId}}"></go-map>
 
         <h4 ng-if="cinemas.length" class="for-button">
             Список кинотеатров

@@ -12,11 +12,12 @@ angular.module('afisha').controller('FilmController',
         $scope.date = common.currentDate;
         $scope.dataLoaded = false;
         $scope.sortByTitle = common.sortByTitle;
+        $scope.stateTitle = '';
 
         let cinemaList = [];
         let showList = [];
 
-        $scope.getFilm = function() {
+        $scope.getInfo = () => {
             $scope.film = {};
             serverService.fetchFilm($scope.filmId, $scope.city.id || common.defaultCity.id, (err, film) => {
                 let localFilm  = Object.assign({}, film);
@@ -27,13 +28,14 @@ angular.module('afisha').controller('FilmController',
                 localFilm.anons = helperService.prepareAnons(film.anons);
 
                 $scope.film = localFilm;
+                $scope.stateTitle = localFilm.title;
 
                 $scope.refreshDate($scope.date);
                 $scope.dataLoaded = true;
             });
         };
 
-        $scope.splitCinemas = function () {
+        $scope.splitCinemas = () => {
             let cinemaIds = common.savedCinemas.map(cinema => cinema.id);
 
             $scope.cinemas = [];
@@ -65,7 +67,7 @@ angular.module('afisha').controller('FilmController',
             $scope.splitCinemas();
         };
 
-        $scope.refreshDate = function(date) {
+        $scope.refreshDate = date => {
             const dateString = new Date(date).toISOString().replace(/T.*$/, '');
             let haveCinema = {};
             let cinemas = [];
@@ -105,7 +107,7 @@ angular.module('afisha').controller('FilmController',
             $scope.splitCinemas();
         };
 
-        $scope.openFilm = function() {
+        $scope.openFilm = () => {
             $state.go('film', {
                 filmId: film.id
             });

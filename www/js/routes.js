@@ -38,6 +38,24 @@ angular.module('afisha').config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'templates/views/cinema.view.html'
             })
 
-            ;
+            .state('cinemasmap', {
+                url: '/citymap/:cityId',
+                controller: 'ListCinemasController',
+                templateUrl: 'templates/views/map.view.html'
+            })
+
+            .state('filmmap', {
+                url: '/filmmap/:filmId',
+                controller: 'FilmController',
+                templateUrl: 'templates/views/map.view.html'
+            })
+
+            .state('cinemamap', {
+                url: '/cinemamap/:cinemaId',
+                controller: 'CinemaController',
+                templateUrl: 'templates/views/map.view.html'
+            })
+
+        ;
     }
 ]);

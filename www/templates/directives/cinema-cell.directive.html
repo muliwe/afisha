@@ -1,7 +1,7 @@
 <ion-item class="cinema_cell">
     <div class="well">
         <h2>{{cinema.title}}</h2>
-        <go-map items="cinema"></go-map>
+        <go-map go="cinemamap" id="{{cinema.id}}"></go-map>
         <p><b>{{city.title}}</b></p>
         <p>{{cinema.address}}</p>
         <p ng-if="cinema.metro">Метро <b>{{cinema.metro}}</b></p>

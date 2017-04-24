@@ -11,14 +11,16 @@ angular.module('afisha').controller('ListCinemasController',
         $scope.cityId = +$stateParams.cityId;
         $scope.currentCity = common.currentCity;
         $scope.sortByTitle = common.sortByTitle;
+        $scope.stateTitle = '';
 
         let cinemaList = [];
 
         recountCurrentCity();
 
-        $scope.getCityCinemas = function(){
+        $scope.getInfo = () => {
             serverService.fetchCity($scope.cityId, (city, cinemas) => {
-                $scope.city = city;
+                $scope.city = Object.assign({}, city);
+                $scope.stateTitle = city.title;
                 cinemaList = cinemas || [];
 
                 cinemaList.forEach(cinema => {
@@ -35,13 +37,13 @@ angular.module('afisha').controller('ListCinemasController',
             });
         };
 
-        $scope.saveCity = function () {
+        $scope.saveCity = () => {
             $scope.currentCity = common.currentCity = $scope.city;
             localStorageService.set('currentCity', JSON.stringify($scope.city));
             recountCurrentCity();
         };
 
-        $scope.splitCinemas = function () {
+        $scope.splitCinemas = () => {
             let cinemaIds = common.savedCinemas.map(cinema => cinema.id);
 
             $scope.cinemas = [];
@@ -72,7 +74,7 @@ angular.module('afisha').controller('ListCinemasController',
             $scope.splitCinemas();
         };
 
-        $scope.openCinema = function (cinema) {
+        $scope.openCinema = cinema => {
             $state.go('cinema', {
                 cinemaId: cinema.id
             });
