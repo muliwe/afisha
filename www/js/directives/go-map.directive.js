@@ -17,7 +17,6 @@ angular.module('afisha').directive('goMap', ['$state',
             };
 
             element.on('click', function () {
-                console.log(scope.go, {[keys[scope.go] || 'id']: scope.id});
                 $state.go(scope.go, {[keys[scope.go] || 'id']: scope.id});});
         }
     };

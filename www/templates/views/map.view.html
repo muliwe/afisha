@@ -12,12 +12,7 @@
 
     </ion-nav-bar>
 
-    <ion-content class="films-list">
-
-        {{savedCinemas.length}}
-        {{cinemas.length}}
-        {{cinemaId}}
-
+    <ion-content has-bouncing="false" padding="false">
+        <maps saved-cinemas="savedCinemas" cinemas="cinemas" cinema="cinema"></maps>
     </ion-content>
-
 </ion-view>
