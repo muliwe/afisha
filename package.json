@@ -1,10 +1,10 @@
 {
-  "name": "schedule-backend",
-  "version": "1.0.0",
+  "name": "afisha-backend",
+  "version": "0.1.0",
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "pretest": "eslint ."
+    "pretest": "#eslint ."
   },
   "dependencies": {
     "body-parser": "^1.15.2",
@@ -60,9 +60,9 @@
     }
   ],
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "https://github.com/muliwe/afisha.git"
   },
   "license": "MIT",
-  "description": "Schedule backend and app"
+  "description": "Afisha backend and app"
 }
