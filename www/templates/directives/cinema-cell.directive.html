@@ -1,0 +1,11 @@
+<ion-item class="cinema_cell">
+    <div class="well">
+        <h2>{{cinema.title}}</h2>
+        <go-map ng-if="cinema.latitude && cinema.longitude" go="cinemamap" id="{{cinema.id}}"></go-map>
+        <p><b>{{city.title}}</b></p>
+        <p>{{cinema.address}}</p>
+        <p ng-if="cinema.metro">Метро <b>{{cinema.metro}}</b></p>
+        <p ng-if="cinema.radius < 10">Находится в <b>{{cinema.radius}} км</b></p>
+        </div>
+    </div>
+</ion-item>

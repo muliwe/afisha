@@ -1,241 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws://localhost:35729 https://mapp.kassa.rambler.ru data: gap: https://ssl.gstatic.com https://api-maps.yandex.ru; img-src * data: blob: filesystem:; style-src 'self' 'unsafe-inline'; script-src 'self' localhost:35729 'unsafe-eval' 'unsafe-inline' api-maps.yandex.ru; connect-src * data: blob: filesystem:; font-src *; media-src * data: blob: filesystem:;">
+    <title>Афиша кино</title>
 
-    <title>Сегодня в кино: Главная</title>
+    <link rel="stylesheet" href="css/ionic.css">
+    <link rel="stylesheet" href="css/roboto.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/afisha.css">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="shortcut icon" href="assets/favicon.ico">
+    <!-- Stylesheets -->
 
-    <!-- Custom CSS -->
-    <link href="css/blog-post.css" rel="stylesheet">
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/release/js/ionic.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/ionic/release/js/ionic-angular.js"></script>
+    <script src="lib/angular-animate/angular-animate.js"></script>
+    <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+    <script src="lib/angular-resource/angular-resource.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <script src="lib/angular-local-storage/dist/angular-local-storage.min.js"></script>
 
-    <script type="text/javascript">
-<!--
-  WebFontConfig = {
-    google: { families: [ 'Roboto:500,400,700:latin,cyrillic' ] }
-  };
-  (function() {
-    var wf = document.createElement('script');
-    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-    wf.type = 'text/javascript';
-    wf.async = 'true';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wf, s);
-  })();
-//-->
-</script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="cordova.js"></script>
 
+    <script src="//api-maps.yandex.ru/2.1/?lang=ru-RU" type="text/javascript"></script>
 </head>
-
-<body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Меню</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Сегодня в кино</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">Города</a>
-                    </li>
-                    <li>
-                        <a href="#">Кинотеатры</a>
-                    </li>
-                    <li>
-                        <a href="#">Фильмы</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-
-            <!-- Blog Post Content Column -->
-            <div class="col-lg-8">
-
-                <h2>Популярные фильмы</h2>
-
-                <a href="film.html">
-                <div class="well">
-                    <img class="img-vert" src="http://s1.kassa.rl0.ru/StaticContent/P/Img/1610/27/161027114012710.jpg" alt="Прибытие">
-
-                    <div class="media-right">
-
-                        <h4>Прибытие</h4>
-                        
-                        <p><b>16+</b></p>
-
-                        <p>Фантастика / мелодрама</p>
-
-                        <p><b>Новинка, широкий прокат</b></p>
-                    
-                    </div>
-                </div>
-                </a>
-
-                <div class="well">
-                    <img class="img-vert" src="http://s1.kassa.rl0.ru/StaticContent/P/Img/1610/27/161027113656722.jpg" alt="Хороший мальчик">
-
-                    <div class="media-right">
-
-                        <h4>Хороший мальчик</h4>
-                        
-                        <p><b>12+</b></p>
-
-                        <p>Подростковое / мелодрама</p>
-
-                        <p><b>Новинка, средний прокат</b></p>
-                    
-                    </div>
-                </div>
-
-                <div class="well">
-                    <img class="img-vert" src="http://s1.kassa.rl0.ru/StaticContent/P/Img/1609/28/160928110516678.jpg" alt="Доктор Стрэндж">
-
-                    <div class="media-right">
-
-                        <h4>Доктор Стрэндж</h4>
-                        
-                        <p><b>16+</b></p>
-
-                        <p>Комиксы / фэнтэзи</p>
-
-                        <p><b>Широкий прокат</b></p>
-                    
-                    </div>
-                </div>
-
-                <div class="well">
-                    <img class="img-vert" src="http://s2.kassa.rl0.ru/StaticContent/P/Img/1609/17/160917193702895.jpg" alt="Дом странных детей мисс Перегрин">
-
-                    <div class="media-right">
-
-                        <h4>Дом странных детей мисс Перегрин</h4>
-                        
-                        <p><b>12+</b></p>
-
-                        <p>Детское / фэнтэзи</p>
-
-                        <p><b>Средний прокат</b></p>
-                    
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Blog Sidebar Widgets Column -->
-            <div class="col-md-4">
-
-                <!-- Blog Search Well -->
-                <div class="well">
-                    <h4>Blog Search</h4>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                        </span>
-                    </div>
-                    <!-- /.input-group -->
-                </div>
-
-                <!-- Blog Categories Well -->
-                <div class="well">
-                    <h4>Blog Categories</h4>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
-
-                <!-- Side Widget Well -->
-                <div class="well">
-                    <h4>Side Widget Well</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
-                </div>
-
-            </div>
-
-        </div>
-        <!-- /.row -->
-
-
-
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>&copy; Сегодня в кино 2016</p>
-                </div>
-            </div>
-            <!-- /.row -->
-        </footer>
-
-    </div>
-    <!-- /.container -->
-
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
+<body class="platform-android platform-cordova platform-webview" ng-class="bodyClass">
+<div ng-include="'templates/home.view.html'" ng-controller="HomeController"></div>
 </body>
 
+<script src="lib/jquery/dist/jquery.min.js"></script>
+<script>
+    jQuery('body').bind('focusin focus', function(e){
+        e.preventDefault();
+    });
+</script>
+
+<script src="js/afisha.module.js"></script>
+<script src="js/constants.module.js"></script>
+<script src="js/routes.js"></script>
+
+<script src="js/services/server.service.js"></script>
+<script src="js/services/helper.service.js"></script>
+
+<script src="js/controllers/home.controller.js"></script>
+<script src="js/controllers/list-films.controller.js"></script>
+<script src="js/controllers/list-cinemas.controller.js"></script>
+<script src="js/controllers/list-cities.controller.js"></script>
+<script src="js/controllers/film.controller.js"></script>
+<script src="js/controllers/cinema.controller.js"></script>
+<script src="js/controllers/ticket.controller.js"></script>
+
+<script src="js/directives/go-films.directive.js"></script>
+<script src="js/directives/go-cinemas.directive.js"></script>
+<script src="js/directives/go-cities.directive.js"></script>
+<script src="js/directives/go-map.directive.js"></script>
+<script src="js/directives/go-show.directive.js"></script>
+<script src="js/directives/film-cell.directive.js"></script>
+<script src="js/directives/calendar-nav.directive.js"></script>
+<script src="js/directives/cinema-cell.directive.js"></script>
+<script src="js/directives/cinema-schedule-cell.directive.js"></script>
+<script src="js/directives/city-cell.directive.js"></script>
+<script src="js/directives/maps.directive.js"></script>
+<script src="js/directives/ticket.directive.js"></script>
+
+<script src="js/app.core.js"></script>
+<script src="js/application.js"></script>
+<script src="js/error_catcher.js"></script>
 </html>

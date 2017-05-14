@@ -1,0 +1,29 @@
+<ion-view class="background" ng-init="getFilmsList()" cache-view="false">
+    <ion-nav-bar class="bar-transparent bar">
+        <ion-nav-buttons side="right">
+            <button class="button button-icon ion-navicon-round light button--toggle-sidemenu" menu-toggle="right"></button>
+        </ion-nav-buttons>
+
+        <ion-nav-title>Города</ion-nav-title>
+
+    </ion-nav-bar>
+
+    <ion-content class="films-list">
+        <ion-list can-swipe="false">
+          <city-cell city="city" current="true" ng-if="city.id"></city-cell>
+        </ion-list>
+
+        <h4>Или выберите свой город:</h4>
+
+        <div class="button-bar">
+            <ion-toggle ng-model="sortByTitle" ng-change="toggleSortChange()">
+                {{sortByTitle ? 'Все города по алфавиту' : 'Только ближайшие к вам' }}
+            </ion-toggle>
+        </div>
+
+        <ion-list can-swipe="false">
+            <city-cell city="aCity" ng-repeat="aCity in cities"></city-cell>
+        </ion-list>
+    </ion-content>
+
+</ion-view>

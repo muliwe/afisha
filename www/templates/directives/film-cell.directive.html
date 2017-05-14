@@ -1,0 +1,20 @@
+<ion-item class="film_cell" ng-click="full ? null : openFilm(film)">
+    <div class="well">
+        <h2 ng-if="full">{{film.title}}</h2>
+
+        <img ng-if="film && film.thumb" class="img-vert" ng-src="{{film.thumb}}" alt="{{film.title}}">
+
+        <div class="media-right">
+
+            <h4 ng-if="!full">{{film.title}}</h4>
+
+            <div><b>{{film.age || 0}}+</b></div>
+
+            <div ng-if="film.theme"><i>{{film.theme}}</i></div>
+
+            <div ng-if="film.shows > 5000"><b>Широкий прокат</b></div>
+
+            <p ng-if="full && film.anons" ng-bind-html="film.anons"></p>
+        </div>
+    </div>
+</ion-item>

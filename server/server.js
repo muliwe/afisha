@@ -1,77 +1,192 @@
-var connect = require('connect');
-var http = require('http');
-var cors = require('cors');
-var app = connect();
-var compression = require('compression');
-var bodyParser = require('body-parser');
-var serveStatic = require('serve-static');
+const connect = require('connect');
+const query = require('connect-query');
+const http = require('http');
+const cors = require('cors');
+const app = connect();
+const compression = require('compression');
+const bodyParser = require('body-parser');
+const serveStatic = require('serve-static');
 
-var data = require('../data/rambler.json');
+const data = require('../data/rambler.json');
 
-var started = new Date();
+const cities = {};
+const cinemas = {};
+const films = {};
+const filmsWithShows = {};
+const cinemasWithoutShows = {};
+
+const started = new Date();
 
 app.use(compression());
 app.use(bodyParser.json({extended: false}));
 app.use(cors());
+app.use(query());
 
-app.use('/cities', function(req, res, next) {
-  res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"}); 
-  res.end(JSON.stringify(data.cities));
+init();
+
+app.use('/cities', (req, res, next) => {
+    sendResponse(data.cities, res);
 });
 
-app.use('/cinemas/', function(req, res, next) {
-  var cinemaId = parseInt(req.originalUrl.replace('/cinemas/', ''), 10);
-  
-  res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"}); 
-  res.end(JSON.stringify(data.cinemas.filter(function (cinema) {
-      return cinema.city === cinemaId;
-  })));
+app.use('/cinemas', (req, res, next) => {
+    const cityId = getIntUrlElem(req, '/cinemas/');
+
+    if (req.originalUrl === '/cinemas') {
+        sendResponse(data.cinemas, res);
+    } else if (cities[cityId]) {
+        sendResponse(cities[cityId].cinemas, res);
+    } else {
+        notFound(`Can't find city ${cityId}`, res);
+    }
 });
 
-app.use('/film/', function(req, res, next) {
-  var filmId = parseInt(req.originalUrl.replace('/film/', ''), 10);
-  
-  res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"}); 
-  res.end(JSON.stringify(data.films.filter(function (film) {
-      return film.id === filmId;
-  })[0]));
+app.use('/cinema', (req, res, next) => {
+    const cinemaId = getIntUrlElem(req, '/cinema/');
+
+    if (cinemas[cinemaId]) {
+        sendResponse(cinemas[cinemaId], res);
+    } else {
+        notFound(`Can't find cinema ${cinemaId}`, res);
+    }
 });
 
-app.use('/show/', function(req, res, next) {
-  var filmId = parseInt(req.originalUrl.replace(/^\/show\/([0-9]+)\/.*$/, '$1'), 10);
-  var cinemaId = parseInt(req.originalUrl.replace(/^\/show\/([0-9]+)\/(.*)$/, '$2'), 10);
-  
-  res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"}); 
-  res.end(JSON.stringify(data.shows.filter(function (show) {
-      return show.film === filmId && show.cinema === cinemaId;
-  })));
+app.use('/films', (req, res, next) => {
+    const cityId = getIntUrlElem(req, '/films/');
+
+    if (req.originalUrl === '/films') {
+        sendResponse(data.films.filter(film => film.shows > 0), res);
+    } else if (cities[cityId]) {
+        sendResponse(cities[cityId].films, res);
+    } else {
+        notFound(`Can't find city ${cityId}`, res);
+    }
 });
 
-app.use(serveStatic(__dirname + '/../www/'));
+app.use('/film/', (req, res, next) => {
+    const filmId = getIntUrlElem(req, '/film/');
+    const cityId = parseInt(req.query.showsFor, 10);
 
-app.use('/', function(req, res, next) {
-  res.writeHead(200, {"Content-Type": "application/json; charset=utf-8"}); 
-  res.end(JSON.stringify({
-      started: started.toISOString(),
-      running: timeDiffFormat((new Date().getTime() - started.getTime()) / 1000)
-  }));
+    if (filmsWithShows[`${cityId}_${filmId}`]) {
+        sendResponse(filmsWithShows[`${cityId}_${filmId}`], res);
+    } else if (films[filmId]) {
+        sendResponse(films[filmId], res);
+    } else {
+        notFound(`Can't find film ${filmId}`, res);
+    }
+});
+
+app.use(serveStatic(__dirname + '/../www/')); // eslint-disable-line no-path-concat
+
+app.use('/', (req, res, next) => {
+    if (req.originalUrl === '/') {
+        sendResponse({
+            started: started.toISOString(),
+            running: timeDiffFormat((new Date().getTime() - started.getTime()) / 1000),
+            originalUrl: req.originalUrl
+        }, res);
+    } else {
+        notFound(`There is no method to handle GET ${req.originalUrl}`, res);
+    }
 });
 
 http.createServer(app).listen(process.env.PORT || 3000);
 
 console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
-function timeDiffFormat(diff) {
-        let hours = Math.floor(diff / 60 / 60);
-        let timerow = `${Math.round(diff)} s`;
+function init() {
+    let cityFilmMap = {};
+    let cityFilmCinemaMap = {};
+    let cinemaFilmMap = {};
 
-        if (diff > 60) {
-            if (diff < 60 * 60) {
-                timerow = `${Math.round(diff / 60)} m`;
-            } else {
-                timerow = `${hours} h ${Math.round(diff / 60) - hours * 60} m`;
-            }
+    data.cities.forEach(city => {
+        cities[city.id] = cloneInstance(city);
+        cities[city.id].cinemas = [];
+        cities[city.id].films = [];
+    });
+
+    data.films.forEach(film => {
+        films[film.id] = film;
+    });
+
+    data.cinemas.forEach(cinema => {
+        cinemasWithoutShows[cinema.id] = cloneInstance(cinema);
+        cinemas[cinema.id] = cloneInstance(cinema);
+        cinemas[cinema.id].films = [];
+        cinemas[cinema.id].shows = [];
+        cinemas[cinema.id].aCity = cities[cinema.city];
+        cities[cinema.city].cinemas.push(cinema);
+    });
+
+    data.shows.forEach(show => {
+        if (!cinemas[show.cinema] || !films[show.film] || !cinemasWithoutShows[show.cinema]) {
+            return;
         }
 
-        return timerow;
+        const key = `${cinemas[show.cinema].city}_${show.film}`;
+        const key2 = `${show.cinema}_${show.film}`;
+        const key3 = `${cinemas[show.cinema].city}_${show.film}_${show.cinema}`;
+
+        if (!cityFilmMap[key]) {
+            cities[cinemas[show.cinema].city].films.push(films[show.film]);
+
+            filmsWithShows[key] = cloneInstance(films[show.film]);
+            filmsWithShows[key].cinemas = [];
+            filmsWithShows[key].shows = [];
+
+            cityFilmMap[key] = true;
+        }
+
+        if (!cinemaFilmMap[key2]) {
+            cinemas[show.cinema].films.push(films[show.film]);
+            cinemaFilmMap[key2] = true;
+        }
+
+        if (!cityFilmCinemaMap[key3]) {
+            filmsWithShows[key].cinemas.push(cinemasWithoutShows[show.cinema]);
+            cityFilmCinemaMap[key3] = true;
+        }
+
+        cinemas[show.cinema].shows.push(show);
+        filmsWithShows[key].shows.push(show);
+    });
+}
+
+function timeDiffFormat(diff) {
+    const hours = Math.floor(diff / 60 / 60);
+    let timeRow = `${Math.round(diff)} s`;
+
+    if (diff > 60) {
+        if (diff < 60 * 60) {
+            timeRow = `${Math.round(diff / 60)} m`;
+        } else {
+            timeRow = `${hours} h ${Math.round(diff / 60) - hours * 60} m`;
+        }
     }
+
+    return timeRow;
+}
+
+function sendResponse(data, res) {
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.end(JSON.stringify(data));
+}
+
+function notFound(message, res) {
+    res.writeHead(404, {'Content-Type': 'application/json; charset=utf-8'});
+    res.end(JSON.stringify({
+        error: {
+            name: 'Error',
+            status: 404,
+            message: message,
+            statusCode: 404
+        }
+    }));
+}
+
+function cloneInstance(instance) {
+    return JSON.parse(JSON.stringify(instance));
+}
+
+function getIntUrlElem(req, url) {
+    return parseInt(req.originalUrl.replace(url, ''), 10);
+}

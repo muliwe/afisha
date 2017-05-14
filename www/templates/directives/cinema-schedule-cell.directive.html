@@ -1,0 +1,44 @@
+<ion-item class="cinema_schedule_cell">
+    <div class="well row">
+        <div class="col-xs-12 higher" ng-show="oneFilm || noSchedule" ng-click="openCinema(cinema)">
+            <h4>{{cinema.title}}</h4>
+            <div ng-show="noSchedule">
+                <p>{{cinema.address}}</p>
+                <p ng-if="cinema.metro">Метро <b>{{cinema.metro}}</b></p>
+                <p ng-if="cinema.radius < 10">Находится в {{cinema.radius}} км</p>
+            </div>
+        </div>
+        <div ng-hide="noSchedule">
+
+            <div class="col-xs-4 higher" ng-show="film && film.thumb" ng-click="openFilm(film)">
+                <img class="img-vert2" ng-src="{{film.thumb}}" alt="{{film.title}}">
+            </div>
+            <div class="col-xs-8 higher clear" ng-show="film" ng-click="openFilm(film)">
+                <h4>{{film.title}}</h4>
+
+                <div><b>{{film.age || 0}}+</b> {{film.theme ? '/ ' + film.theme : ''}}</div>
+            </div>
+            <br clear="all" />
+
+            <div class="col-xs-12 higher" ng-if="oneFilm">
+                <div class="col-xs-3 col-sm-3" go-show cinema-id="cinema.id"
+                     ng-repeat="show in cinema.shows" ng-class="show.timeClass"
+                     show-id="show.id">{{show.time}}</div>
+            </div>
+
+            <div ng-if="film.halls" ng-repeat="hall in film.halls">
+                <div class="col-xs-12 higher">
+                    <b>{{hall.title}}</b>
+                </div>
+                <div ng-if="hall.format" class="col-xs-12 higher">
+                    {{hall.format}}
+                </div>
+                <div class="col-xs-12 higher">
+                    <div class="col-xs-3 col-sm-3" go-show cinema-id="cinema.id"
+                         ng-repeat="show in hall.shows" ng-class="show.timeClass"
+                         show-id="show.id">{{show.time}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-item>

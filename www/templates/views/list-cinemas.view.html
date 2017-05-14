@@ -1,0 +1,59 @@
+<ion-view class="background" ng-init="getInfo()" cache-view="false">
+    <ion-nav-bar class="bar-transparent bar">
+        <ion-nav-back-button class="button-clear">
+            <i class="ion-arrow-left-c"></i>
+        </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+            <button class="button button-icon ion-navicon-round light button--toggle-sidemenu"
+                    menu-toggle="right"></button>
+        </ion-nav-buttons>
+
+        <ion-nav-title>{{stateTitle}}</ion-nav-title>
+
+    </ion-nav-bar>
+
+    <ion-content class="films-list">
+
+        <div class="button-bar" ng-show="city.id !== currentCity.id" >
+            <a class="button"
+               ng-click="saveCity()">Сохранить {{city.title}}</a>
+        </div>
+
+        <div class="button-bar" ng-show="city.id === currentCity.id" >
+            <a class="button" go-cities>{{city.title}} &#151; мой город</a>
+        </div>
+
+        <div class="button-bar">
+            <ion-toggle ng-model="sortByTitle" ng-change="toggleSortChange()">
+                {{sortByTitle ? 'Все кинотеатры' : 'Ближайшие кинотеатры' }}
+            </ion-toggle>
+        </div>
+
+        <go-map ng-if="savedCinemas.length" go="cinemasmap" id="{{cityId}}"></go-map>
+
+        <h4 ng-if="savedCinemas.length" class="for-button">
+            Ваши кинотеатры
+        </h4>
+
+        <ion-list  ng-if="savedCinemas.length" can-swipe="false">
+            <cinema-schedule-cell cinema="cinema" no-schedule="true"
+                       ng-repeat="cinema in savedCinemas">
+            </cinema-schedule-cell>
+        </ion-list>
+
+        <go-map ng-if="cinemas.length" go="cinemasmap" id="{{cityId}}"></go-map>
+
+        <h4 ng-if="cinemas.length" class="for-button">
+            Список кинотеатров
+            <small go-cities>Город {{city.title}}</small>
+        </h4>
+
+        <ion-list  ng-if="cinemas.length" can-swipe="false">
+            <cinema-schedule-cell cinema="cinema" no-schedule="true"
+                                  ng-repeat="cinema in cinemas">
+            </cinema-schedule-cell>
+        </ion-list>
+
+    </ion-content>
+
+</ion-view>

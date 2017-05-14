@@ -8,9 +8,9 @@
     "angular-sanitize": "1.4.7",
     "angular-ui-router": "0.2.18",
     "ionic": "~1.2.0",
-    "angular-toArrayFilter": "~1.0.1",
     "jquery": "^2.2.3",
-    "ngCordova": "^0.1.26-alpha"
+    "ngCordova": "^0.1.26-alpha",
+    "angular-local-storage": "~0.5.2"
   },
   "devDependencies": {
     "ionic-service-core": "~0.1.9"
