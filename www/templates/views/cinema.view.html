@@ -50,7 +50,7 @@
         </div>
 
         <ion-list can-swipe="false" ng-if="dataLoaded">
-            <cinema-schedule-cell film="film"
+            <cinema-schedule-cell film="film" cinema="cinema"
                                   ng-repeat="film in films">
             </cinema-schedule-cell>
             <div ng-hide="films.length">Расписание на этот день не найдено</div>

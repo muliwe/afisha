@@ -56,6 +56,12 @@ angular.module('afisha').config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'templates/views/map.view.html'
             })
 
+            .state('ticket', {
+                url: '/ticket/:cinemaId/show/:showId',
+                controller: 'TicketController',
+                templateUrl: 'templates/views/ticket.view.html'
+            })
+
         ;
     }
 ]);
