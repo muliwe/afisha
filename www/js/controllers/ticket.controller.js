@@ -8,7 +8,6 @@ angular.module('afisha').controller('TicketController',
 
         $scope.cinemaId = +$stateParams.cinemaId;
         $scope.showId = +$stateParams.showId;
-        $scope.date = common.currentDate;
         $scope.stateTitle = '';
 
         let localCinema = {};

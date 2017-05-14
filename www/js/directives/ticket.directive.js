@@ -4,7 +4,7 @@ angular.module('afisha').directive('ticket', ['$sce',
     function($sce) {
     return {
         restrict: 'E',
-        template: '<iframe src="{{url}}" id="ticket" scroll="no"></iframe>',
+        template: '<iframe ng-src="{{url}}" id="ticket" scroll="no"></iframe>',
         scope: {
             show: '='
         },
