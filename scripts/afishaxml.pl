@@ -113,7 +113,7 @@ $xml{$file2} = "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". 
 };
 };
 
-open(JSON,">rambler.json");
+open(JSON,">rambler.json.tmp");
 
 my $ref3 = $xs->XMLin("cities.xml");
 
@@ -388,6 +388,7 @@ $shows
 EOF
 close JSON;
 
+`/bin/mv rambler.json.tmp rambler.json`;
 `/bin/tar -cpPzf rambler.tar.gz rambler.json`;
 
 exit(0);
