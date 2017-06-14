@@ -6,16 +6,21 @@ const app = connect();
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
+const zlib = require('zlib');
+const tar = require('tar-fs');
+const fs = require('fs');
+const cjson = require('cjson');
+const schedule = require('node-schedule');
 
-const data = require('../data/rambler.json');
-
-const cities = {};
-const cinemas = {};
-const films = {};
-const filmsWithShows = {};
-const cinemasWithoutShows = {};
+let data = {};
+let cities = {};
+let cinemas = {};
+let films = {};
+let filmsWithShows = {};
+let cinemasWithoutShows = {};
 
 const started = new Date();
+const doIt = schedule.scheduleJob('55 3,15 * * *', init);
 
 app.use(compression());
 app.use(bodyParser.json({extended: false}));
@@ -93,22 +98,61 @@ http.createServer(app).listen(process.env.PORT || 3000);
 
 console.log('Server started at http://127.0.0.1:' + (process.env.PORT || 3000));
 
-function init() {
+function downloadThenParse(next) {
+    const req = http.get('http://www.kinokadr.ru/export/afisha.tar.gz');
+
+    req.on('response', function(res) {
+        const total = res.headers['content-length']; //total byte length
+        let count = 0;
+        res.on('data', function(data) {
+            count += data.length;
+            // console.log(count/total*100, '%');
+        })
+            .pipe(zlib.createGunzip())
+            .pipe(fs.createWriteStream('./data/afisha.tar'))
+            .on('close',() => {
+                console.log('finished downloading, start extracting');
+
+                fs.createReadStream('./data/afisha.tar')
+                    .pipe(tar.extract('./data'))
+                    .on('finish',() => {
+                        console.log('finished extracting, start parsing');
+
+                        try {
+                            data = cjson.load('./data/rambler.json', true);
+                            console.log('extracted completely', new Date());
+                        } catch (e) {
+                            console.log('JSON parse error: ', e);
+                        }
+
+                        next();
+                    });
+            });
+    });
+}
+
+function manageData() {
     let cityFilmMap = {};
     let cityFilmCinemaMap = {};
     let cinemaFilmMap = {};
 
-    data.cities.forEach(city => {
+    cities = {};
+    cinemas = {};
+    films = {};
+    filmsWithShows = {};
+    cinemasWithoutShows = {};
+
+    (data.cities || []).forEach(city => {
         cities[city.id] = cloneInstance(city);
         cities[city.id].cinemas = [];
         cities[city.id].films = [];
     });
 
-    data.films.forEach(film => {
+    (data.films || []).forEach(film => {
         films[film.id] = film;
     });
 
-    data.cinemas.forEach(cinema => {
+    (data.cinemas || []).forEach(cinema => {
         cinemasWithoutShows[cinema.id] = cloneInstance(cinema);
         cinemas[cinema.id] = cloneInstance(cinema);
         cinemas[cinema.id].films = [];
@@ -117,7 +161,7 @@ function init() {
         cities[cinema.city].cinemas.push(cinema);
     });
 
-    data.shows.forEach(show => {
+    (data.shows || []).forEach(show => {
         if (!cinemas[show.cinema] || !films[show.film] || !cinemasWithoutShows[show.cinema]) {
             return;
         }
@@ -149,6 +193,10 @@ function init() {
         cinemas[show.cinema].shows.push(show);
         filmsWithShows[key].shows.push(show);
     });
+}
+
+function init() {
+    downloadThenParse(manageData);
 }
 
 function timeDiffFormat(diff) {
