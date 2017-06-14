@@ -343,6 +343,7 @@ my $shows = '';
 foreach my $file (sort keys %xml)
 {
 next unless ($file =~ /^Sessions/);
+next unless (-e $file);
 print "$file \n";
 
 my $ref2 = $xs->XMLin("$file");
