@@ -1,5 +1,5 @@
 {
-  "name": "afisha-backend",
+  "name": "afisha-app",
   "version": "0.1.0",
   "main": "server/server.js",
   "scripts": {
@@ -68,5 +68,5 @@
     "url": "https://github.com/muliwe/afisha.git"
   },
   "license": "MIT",
-  "description": "Afisha backend and app"
+  "description": "Afisha app"
 }
