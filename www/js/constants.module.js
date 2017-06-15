@@ -2,7 +2,7 @@
 angular.module('constants', []);
 
 angular.module('constants').constant('common', {
-    serverUrl: 'http://127.0.0.1:3000',
+    serverUrl: 'http://afisha-back.kinokadr.ru:3020', // 'http://127.0.0.1:3000',
     currentDate: new Date(),
     defaultCity: {
         id: 2,

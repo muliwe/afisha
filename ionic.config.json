@@ -1,0 +1,12 @@
+{
+  "name": "Afisha",
+  "app_id": "123456",
+  "gulpStartupTasks": [
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ],
+  "type": "ionic1"
+}

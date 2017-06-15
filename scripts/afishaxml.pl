@@ -102,14 +102,14 @@ my @types = ('Places','Creations','Sessions');
 
 foreach my $type (@types) 
 {
-`/bin/rm $type/*.xml` if ($type ne 'Sessions');
+`/bin/rm $type/*.xml` if ($type ne 'Sessions123');
 
 foreach my $file (@{$ref->{$type}->{Files}->{File}})
 {
 #print Dumper($file);
 my $file2 = $type ."/". $file->{filename};
 $xml{$file2} = "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". $file->{filename};
-&wget_url($file2,$xml{$file2}) if ($type ne 'Sessions');
+&wget_url($file2,$xml{$file2}) if ($type ne 'Sessions123');
 };
 };
 
@@ -390,6 +390,7 @@ EOF
 close JSON;
 
 `/bin/mv rambler.json.tmp rambler.json`;
+`/bin/rm rambler.tar.gz`;
 `/bin/tar -cpPzf rambler.tar.gz rambler.json`;
 
 exit(0);
