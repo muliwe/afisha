@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 
-#use strict; 
+#use strict;
 #use warnings;
 use Data::Dumper;
 use XML::Simple;
@@ -44,26 +44,26 @@ $city2{$city{$city}} = $city;
 
 my %conf_lang=
   (
-  'sci-fi' => 'Ôàíòàñòèêà',
-  'action' => 'Ýêøí',
-  'drama' => 'Äðàìà',
-  'kids' => 'Ôèëüì-äåòÿì',
-  'humor' => 'Êîìåäèè',
-  'romance' => 'Ìåëîäðàìà',
-  'disaster' => 'Ôèëüì-êàòàñòðîôà',
-  'fantasy' => 'Ôèëüì-ôàíòàçèÿ',
-  'adventure' => 'Ïðèêëþ÷åíèÿ è ôýíòýçè',
-  'detective' => 'Äåòåêòèâ',
-  'documentary' => 'Äîêóìåíòàëüíîå êèíî',
-  'horror' => 'Óæàñ!',
-  'peplum' => 'Èñòîðè÷åñêèé',
-  'comics' => 'Êèíî-êîìèêñ',
-  'musical' => 'Ìþçèêë',
-  'military' => 'Âîéíà',
-  'sport' => 'Ñïîðò',
-  'crime' => 'Êðèìèíàëüíîå',
-  'serials' => 'Ñåðèàëû',
-  
+  'sci-fi' => 'Ð¤Ð°Ð½Ñ‚Ð°ÑÑ‚Ð¸ÐºÐ°',
+  'action' => 'Ð­ÐºÑˆÐ½',
+  'drama' => 'Ð”Ñ€Ð°Ð¼Ð°',
+  'kids' => 'Ð¤Ð¸Ð»ÑŒÐ¼-Ð´ÐµÑ‚ÑÐ¼',
+  'humor' => 'ÐšÐ¾Ð¼ÐµÐ´Ð¸Ð¸',
+  'romance' => 'ÐœÐµÐ»Ð¾Ð´Ñ€Ð°Ð¼Ð°',
+  'disaster' => 'Ð¤Ð¸Ð»ÑŒÐ¼-ÐºÐ°Ñ‚Ð°ÑÑ‚Ñ€Ð¾Ñ„Ð°',
+  'fantasy' => 'Ð¤Ð¸Ð»ÑŒÐ¼-Ñ„Ð°Ð½Ñ‚Ð°Ð·Ð¸Ñ',
+  'adventure' => 'ÐŸÑ€Ð¸ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ð¸ Ñ„ÑÐ½Ñ‚ÑÐ·Ð¸',
+  'detective' => 'Ð”ÐµÑ‚ÐµÐºÑ‚Ð¸Ð²',
+  'documentary' => 'Ð”Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ð°Ð»ÑŒÐ½Ð¾Ðµ ÐºÐ¸Ð½Ð¾',
+  'horror' => 'Ð£Ð¶Ð°Ñ!',
+  'peplum' => 'Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹',
+  'comics' => 'ÐšÐ¸Ð½Ð¾-ÐºÐ¾Ð¼Ð¸ÐºÑ',
+  'musical' => 'ÐœÑŽÐ·Ð¸ÐºÐ»',
+  'military' => 'Ð’Ð¾Ð¹Ð½Ð°',
+  'sport' => 'Ð¡Ð¿Ð¾Ñ€Ñ‚',
+  'crime' => 'ÐšÑ€Ð¸Ð¼Ð¸Ð½Ð°Ð»ÑŒÐ½Ð¾Ðµ',
+  'serials' => 'Ð¡ÐµÑ€Ð¸Ð°Ð»Ñ‹',
+
 #  '' => '',
   );
 
@@ -100,7 +100,7 @@ my $ref = $xs->XMLin("index.xml");
 
 my @types = ('Places','Creations','Sessions');
 
-foreach my $type (@types) 
+foreach my $type (@types)
 {
 `/bin/rm $type/*.xml` if ($type ne 'Sessions123');
 
@@ -188,6 +188,8 @@ my $anons = ${$data2[0]}[1] ? "\"${$data2[0]}[1]\"" : 'null';
 $anons =~ s!href=\\"/!href=\\"http://www.kinokadr.ru/!g;
 
 my $theme = $conf_lang{${$data2[0]}[2]} ? "\"$conf_lang{${$data2[0]}[2]}\"" : 'null';
+Encode::_utf8_off($theme);
+Encode::from_to($theme, "utf-8", "windows-1251");
 
 my $insert ;
 
@@ -205,24 +207,28 @@ $file =~ s/\/(\d\d)/\/$1\//;
 my $thumb = $file;
 $thumb =~ s/\.jpg/_thumb\.jpg/;
 
-print "$poster -> $file ($thumb) ";
-$poster = "\"http://pics.kinokadr.ru/$file\",\"thumb\":\"http://pics.kinokadr.ru/$thumb\"";
+my $poster_json = "null,\"thumb\":null";
 
-if (-s $file) {
-  print " CACHE\n";
-} else {
-  &wget_url($file,$poster);
-  if (-s $file) {
-    `/usr/bin/convert $file -resize 200 -quality 70 $thumb`;
-    print " OK\n";
-  } else {
-    $poster = "null,\"thumb\":null";
-    print " ERROR\n";
-  }
+if ($poster) {
+    print "$poster -> $file ($thumb) ";
+    $poster_json = "\"http://pics.kinokadr.ru/$file\",\"thumb\":\"http://pics.kinokadr.ru/$thumb\"";
+
+    if (-s $file) {
+      print " CACHE\n";
+    } else {
+      &wget_url($file,$poster);
+      if (-s $file) {
+        `/usr/bin/convert $file -resize 200 -quality 70 $thumb`;
+        print " OK\n";
+      } else {
+        $poster_json = "null,\"thumb\":null";
+        print " ERROR\n";
+      }
+    }
 }
 
 my $filmstr = <<EOF;
-{"id":$id,"title":"$name","age":"$age","shows":$shows,"poster":$poster,"anons":$anons,"theme":$theme},
+{"id":$id,"title":"$name","age":"$age","shows":$shows,"poster":$poster_json,"anons":$anons,"theme":$theme},
 EOF
 
 print $filmstr;
