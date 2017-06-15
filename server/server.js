@@ -20,6 +20,7 @@ let filmsWithShows = {};
 let cinemasWithoutShows = {};
 
 const started = new Date();
+let reloaded = new Date();
 const doIt = schedule.scheduleJob('55 3,15 * * *', init);
 
 app.use(compression());
@@ -82,12 +83,20 @@ app.use('/film/', (req, res, next) => {
 
 app.use(serveStatic(__dirname + '/../www/')); // eslint-disable-line no-path-concat
 
+app.use('/reload', (req, res, next) => {
+    init();
+    sendResponse({
+        status: 'OK'
+    }, res);
+});
+
 app.use('/', (req, res, next) => {
     if (req.originalUrl === '/') {
         sendResponse({
             started: started.toISOString(),
-            running: timeDiffFormat((new Date().getTime() - started.getTime()) / 1000),
-            originalUrl: req.originalUrl
+            reloaded: reloaded.toISOString(),
+            updated: data.updated,
+            running: timeDiffFormat((new Date().getTime() - started.getTime()) / 1000)
         }, res);
     } else {
         notFound(`There is no method to handle GET ${req.originalUrl}`, res);
@@ -124,6 +133,8 @@ function downloadThenParse(next) {
                         } catch (e) {
                             console.log('JSON parse error: ', e);
                         }
+
+                        reloaded = new Date();
 
                         next();
                     });
