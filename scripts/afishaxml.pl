@@ -82,15 +82,7 @@ chdir('/home/u12939/kinokadr.ru/kinosupport/afisha/');
 
 `/bin/rm *.xml`;
 
-my %xml = (
-"cities.xml" => "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/fullmovie-cities1.xml",
-"index.xml" => "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/"
-);
-
-foreach my $file (sort keys %xml)
-{
-&wget_url($file,$xml{$file});
-};
+&wget_url("index.xml","http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/");
 
 my $xs = new XML::Simple();
 
@@ -98,24 +90,32 @@ my $ref = $xs->XMLin("index.xml");
 
 #print Dumper($ref);
 
-my @types = ('Places','Creations','Sessions');
+my @types = ('Cities','Places','Creations','Sessions');
 
 foreach my $type (@types)
 {
-`/bin/rm $type/*.xml` if ($type ne 'Sessions123');
+  $xml{$type} = $ref->{$type}->{Files}->{File};
+}
 
-foreach my $file (@{$ref->{$type}->{Files}->{File}})
+foreach my $file (sort keys %xml)
 {
-#print Dumper($file);
-my $file2 = $type ."/". $file->{filename};
-$xml{$file2} = "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". $file->{filename};
-&wget_url($file2,$xml{$file2}) if ($type ne 'Sessions123');
-};
+`/bin/rm $file/*.xml`;
+
+if (ref($xml{$file}) eq "ARRAY") 
+{
+ foreach my $file2 (@{$xml{$file}}) 
+  { 
+    &wget_url($file .'/'. $file2->{filename}, "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". $file2->{filename});
+    $xml{$file .'/'. $file2->{filename}} = "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". $file2->{filename};
+  }
+} else { 
+ &wget_url($file .'/index.xml', "http://api.kassa.rambler.ru/v2/$apikey/xml/Movie/export/full/". $xml{$file}->{filename});
+}
 };
 
 open(JSON,">rambler.json.tmp");
 
-my $ref3 = $xs->XMLin("cities.xml");
+my $ref3 = $xs->XMLin("Cities/index.xml");
 
 my $cities = '';
 
@@ -151,13 +151,7 @@ my $films = '';
 #my @data;
 #my $err = &dataselect("delete from ramblerfilms", \@data, \$connected, \$dbh);
 
-foreach my $file (sort keys %xml)
-{
-#last;
-next unless ($file =~ /^Creations/);
-print "$file \n";
-
-my $ref2 = $xs->XMLin("$file");
+my $ref2 = $xs->XMLin("Creations/index.xml");
 
 #print Dumper($ref2);
 #exit(0);
@@ -247,7 +241,6 @@ my @data3;
 my $err = &dataselect($insert, \@data3, \$connected, \$dbh);
 
 };
-};
 
 $films =~ s/\,\s*$//s;
 Encode::_utf8_off($films);
@@ -262,15 +255,10 @@ EOF
 $i = 0;
 my $cinemas = '';
 
-my @data;
-my $err = &dataselect("delete from ramblercinemas", \@data, \$connected, \$dbh);
+#my @data;
+#my $err = &dataselect("delete from ramblercinemas", \@data, \$connected, \$dbh);
 
-foreach my $file (sort keys %xml)
-{
-next unless ($file =~ /^Places/);
-print "$file \n";
-
-my $ref2 = $xs->XMLin("$file");
+my $ref2 = $xs->XMLin("Places/index.xml");
 
 #print Dumper($ref2);
 #exit(0);
@@ -331,7 +319,6 @@ my @data2;
 my $err = &dataselect($insert, \@data2, \$connected, \$dbh);
 
 };
-};
 
 Encode::_utf8_off($cinemas);
 $cinemas =~ s/\,\s*$//s;
@@ -345,10 +332,11 @@ EOF
 
 $i = 0;
 my $shows = '';
+my $cinemashows = {};
 
 foreach my $file (sort keys %xml)
 {
-next unless ($file =~ /^Sessions/);
+next unless ($file =~ /^Sessions\//);
 next unless (-e $file);
 print "$file \n";
 
@@ -377,6 +365,8 @@ my $time = $date;
 $date =~ s/^(\d{4}\-\d{2}\-\d{2}) (\d{2}\:\d{2})$/$1/;
 $time =~ s/^(\d{4}\-\d{2}\-\d{2}) (\d{2}\:\d{2})$/$2/;
 
+$cinemashows{$cinema}++;
+
 $shows .= <<EOF;
 {"id":$id,"cinema":$cinema,"film":$film,"date":"$date","time":"$time","format":"$format","hall":"$hall","min":$minprice,"max":$maxprice},
 EOF
@@ -398,6 +388,16 @@ close JSON;
 `/bin/mv rambler.json.tmp rambler.json`;
 `/bin/rm rambler.tar.gz`;
 `/bin/tar -cpPzf rambler.tar.gz rambler.json`;
+
+my @data3;
+my $err = &dataselect("update ramblercinemas set shows = 0", \@data3, \$connected, \$dbh);
+
+foreach my $cinema (sort keys %cinemashows) 
+{
+ my $update = "update ramblercinemas set shows = $cinemashows{$cinema} where ramblerid = $cinema";
+ my @data4;
+ my $err = &dataselect($update, \@data4, \$connected, \$dbh);
+}
 
 exit(0);
 
